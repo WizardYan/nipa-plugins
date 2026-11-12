@@ -1,6 +1,6 @@
 # Official NIPA plugin packages
 
-Each page lists the bundled files and lets you read them in the browser. FreeSurfer and Thalamic Nuclei Segmentation are in [release v2.3.1](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.1). The other five packages are in [release v2.3.0](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.0).
+Each page lists the bundled files and lets you read them in the browser. All seven packages are available in [release v2.3.2](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.2).
 
 - [CAT12](plugins/cat12.md)
 - [fMRIPrep](plugins/fmriprep.md)
