@@ -1,12 +1,12 @@
 # Thalamic Nuclei Segmentation
 
-**Thalamic Nuclei Segmentation** · Plugin version 1.1.1 · Runtime 7.3.2
+**Thalamic Nuclei Segmentation** · Plugin version 1.1.2 · Runtime 7.3.2
 
 FreeSurfer thalamic nuclei segmentation as an independent Artifact producer.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.1/thalamic_nuclei-1.1.1.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/thalamic_nuclei-1.1.2.nipa-plugin.tar.gz)
 
-SHA-256: `a3fceb8b2d221b8e25eaf9f12b66377a691bfcf6ce1cbd744755f4a882e7de00`
+SHA-256: `e5c117308d75d82468562b1826d5f6225303e94b57e2ef46dde6e24af1b41771`
 
 [Upstream project](https://surfer.nmr.mgh.harvard.edu/fswiki/ThalamicNuclei)
 
@@ -15,9 +15,8 @@ SHA-256: `a3fceb8b2d221b8e25eaf9f12b66377a691bfcf6ce1cbd744755f4a882e7de00`
 ## Package files
 
 - [plugin.yaml](#package-file-1)
-- [__init__.py](#package-file-2)
-- [adapter.py](#package-file-3)
-- [run.sh](#package-file-4)
+- [adapter.py](#package-file-2)
+- [run.sh](#package-file-3)
 
 ### Package file 1
 
@@ -28,7 +27,7 @@ schema: nipa.plugin/v3
 plugin:
   id: thalamic_nuclei
   name: Thalamic Nuclei Segmentation
-  version: 1.1.1
+  version: 1.1.2
   category: structural
   description: FreeSurfer thalamic nuclei segmentation as an independent Artifact
     producer.
@@ -101,12 +100,6 @@ implementation:
 
 ### Package file 2
 
-**__init__.py**
-
-*Empty file.*
-
-### Package file 3
-
 **adapter.py**
 
 ```python
@@ -171,7 +164,7 @@ def discover_artifacts(*, root: Path, definition: dict[str, Any], scan_payload: 
         )
 ```
 
-### Package file 4
+### Package file 3
 
 **run.sh**
 
