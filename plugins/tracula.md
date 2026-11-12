@@ -1,12 +1,12 @@
 # TRACULA
 
-**TRACULA** · Plugin version 1.1.1 · Runtime 7.3.2
+**TRACULA** · Plugin version 1.1.2 · Runtime 7.3.2
 
 Diffusion MRI tractography using producer-neutral artifact contracts and a native TRACULA execution adapter.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/tracula-1.1.1.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/tracula-1.1.2.nipa-plugin.tar.gz)
 
-SHA-256: `52a19d312ae37690f1bd8b3b5dcde314a8689bf662f26ab4aa2c0af70ab22fd1`
+SHA-256: `bb1e2bccdeee5770e4463d4c7ed41dcdb79030fcd8cecb7e274b3765cf9e99dd`
 
 [Upstream project](https://surfer.nmr.mgh.harvard.edu/fswiki/Tracula)
 
@@ -15,13 +15,12 @@ SHA-256: `52a19d312ae37690f1bd8b3b5dcde314a8689bf662f26ab4aa2c0af70ab22fd1`
 ## Package files
 
 - [plugin.yaml](#package-file-1)
-- [__init__.py](#package-file-2)
-- [adapter.py](#package-file-3)
-- [run.sh](#package-file-4)
-- [tracula_auto_configuration.sh](#package-file-5)
-- [tracula_check_freesurfer_outputs.sh](#package-file-6)
-- [tracula_exec.sh](#package-file-7)
-- [tracula_validate_configuration.sh](#package-file-8)
+- [adapter.py](#package-file-2)
+- [run.sh](#package-file-3)
+- [tracula_auto_configuration.sh](#package-file-4)
+- [tracula_check_freesurfer_outputs.sh](#package-file-5)
+- [tracula_exec.sh](#package-file-6)
+- [tracula_validate_configuration.sh](#package-file-7)
 
 ### Package file 1
 
@@ -32,7 +31,7 @@ schema: nipa.plugin/v3
 plugin:
   id: tracula
   name: TRACULA
-  version: 1.1.1
+  version: 1.1.2
   category: diffusion
   description: Diffusion MRI tractography using producer-neutral artifact contracts and a native TRACULA execution adapter.
 transformation:
@@ -360,12 +359,6 @@ ui:
 
 ### Package file 2
 
-**__init__.py**
-
-*Empty file.*
-
-### Package file 3
-
 **adapter.py**
 
 ```python
@@ -413,7 +406,7 @@ def validate_runtime(runtime: TraculaRuntime) -> bool:
     return True
 ```
 
-### Package file 4
+### Package file 3
 
 **run.sh**
 
@@ -599,7 +592,7 @@ echo "TRACULA completed successfully: $ID"
 echo "Finished: $(date --iso-8601=seconds)"
 ```
 
-### Package file 5
+### Package file 4
 
 **tracula_auto_configuration.sh**
 
@@ -776,7 +769,7 @@ echo "  Thalamic nuclei: ${THALAMIC_MGZ:-not resolved}"
 echo "  usethalnuc:      $USE_THALAMIC_NUCLEI"
 ```
 
-### Package file 6
+### Package file 5
 
 **tracula_check_freesurfer_outputs.sh**
 
@@ -823,7 +816,7 @@ else
 fi
 ```
 
-### Package file 7
+### Package file 6
 
 **tracula_exec.sh**
 
@@ -947,7 +940,7 @@ fi
 exit "$container_rc"
 ```
 
-### Package file 8
+### Package file 7
 
 **tracula_validate_configuration.sh**
 
