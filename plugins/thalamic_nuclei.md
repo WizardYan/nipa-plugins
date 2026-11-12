@@ -1,12 +1,12 @@
 # Thalamic Nuclei Segmentation
 
-**Thalamic Nuclei Segmentation** · Plugin version 1.1.0 · Runtime 7.3.2
+**Thalamic Nuclei Segmentation** · Plugin version 1.1.1 · Runtime 7.3.2
 
 FreeSurfer thalamic nuclei segmentation as an independent Artifact producer.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/thalamic_nuclei-1.1.0.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.1/thalamic_nuclei-1.1.1.nipa-plugin.tar.gz)
 
-SHA-256: `60785414c0a067ab317867d2941b5f17f81b212b6b16f733625965508f1accb6`
+SHA-256: `a3fceb8b2d221b8e25eaf9f12b66377a691bfcf6ce1cbd744755f4a882e7de00`
 
 [Upstream project](https://surfer.nmr.mgh.harvard.edu/fswiki/ThalamicNuclei)
 
@@ -16,7 +16,7 @@ SHA-256: `60785414c0a067ab317867d2941b5f17f81b212b6b16f733625965508f1accb6`
 
 - [plugin.yaml](#package-file-1)
 - [__init__.py](#package-file-2)
-- [outputs.py](#package-file-3)
+- [adapter.py](#package-file-3)
 - [run.sh](#package-file-4)
 
 ### Package file 1
@@ -28,7 +28,7 @@ schema: nipa.plugin/v3
 plugin:
   id: thalamic_nuclei
   name: Thalamic Nuclei Segmentation
-  version: 1.1.0
+  version: 1.1.1
   category: structural
   description: FreeSurfer thalamic nuclei segmentation as an independent Artifact
     producer.
@@ -87,8 +87,8 @@ implementation:
   outputs:
     root: derivatives/thalamic_nuclei
     environment: THALAMIC_NUCLEI_OUT_ROOT
-    scanner: outputs.py:scan_outputs
-    artifact_adapter: outputs.py:discover_artifacts
+    scanner: adapter.py:scan_outputs
+    artifact_adapter: adapter.py:discover_artifacts
   provenance:
     capture:
     - resolved_inputs
@@ -107,7 +107,7 @@ implementation:
 
 ### Package file 3
 
-**outputs.py**
+**adapter.py**
 
 ```python
 from __future__ import annotations
