@@ -1,12 +1,12 @@
 # CAT12
 
-**CAT12** · Plugin version 1.1.0 · Runtime brainprep-anat-v1
+**CAT12** · Plugin version 1.1.1 · Runtime brainprep-anat-v1
 
 T1w tissue segmentation, morphometry, and image-quality reporting.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/cat12-1.1.0.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/cat12-1.1.1.nipa-plugin.tar.gz)
 
-SHA-256: `fad5a410d8653ce705112264dceb3d3790a24a7c80b7a7f93420762d2bab6640`
+SHA-256: `86e5d7eabe610e9b0bf7a6e7e8e32eaf5e3fa34f0eff12ae3e95c756eed35449`
 
 [Upstream project](https://github.com/ChristianGaser/cat12)
 
@@ -15,9 +15,8 @@ SHA-256: `fad5a410d8653ce705112264dceb3d3790a24a7c80b7a7f93420762d2bab6640`
 ## Package files
 
 - [plugin.yaml](#package-file-1)
-- [__init__.py](#package-file-2)
-- [run.sh](#package-file-3)
-- [run_cat12_one.sh](#package-file-4)
+- [run.sh](#package-file-2)
+- [run_cat12_one.sh](#package-file-3)
 
 ### Package file 1
 
@@ -28,7 +27,7 @@ schema: nipa.plugin/v3
 plugin:
   id: cat12
   name: CAT12
-  version: 1.1.0
+  version: 1.1.1
   category: structural
   description: T1w tissue segmentation, morphometry, and image-quality reporting.
 transformation:
@@ -226,12 +225,6 @@ ui:
 
 ### Package file 2
 
-**__init__.py**
-
-*Empty file.*
-
-### Package file 3
-
 **run.sh**
 
 ```bash
@@ -338,7 +331,7 @@ echo "CAT12 completed successfully: $MWP1"
 echo "Finished: $(date)"
 ```
 
-### Package file 4
+### Package file 3
 
 **run_cat12_one.sh**
 
