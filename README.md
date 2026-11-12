@@ -1,13 +1,20 @@
 # nipa-plugins
 
-Official plugin packages for NIPA (NeuroImaging Processing & Analytics). Find the six `.nipa-plugin.tar.gz` archives under **Assets** on the [v2.3.0 release page](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.0).
+Official plugin packages for NIPA (NeuroImaging Processing & Analytics). Find the seven `.nipa-plugin.tar.gz` archives under **Assets** on the [v2.3.2 release page](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.2).
+
+## Start with a manifest-only plugin
+
+1. In **Plugin Store → Plugin Playground**, click **Create plugin**. Enter `copy_text_tutorial`, keep the default **Command-line tool** template, and click **Create source folder**.
+2. Click **Edit draft**. In `plugin.yaml`, find `implementation.command`. It runs `cp` with the file bound to `{input.input}` and writes `{output.dir}/{subject}_{session}_result.txt`. The output declaration gives matching files the Artifact type `text`. The bundled example supplies `example_input.txt`.
+3. Click **Save & validate** and look for **Saved · Validation passed**. Click **Run bundled example**.
+4. Under **Output files**, look for `sub-example_ses-example_result.txt`. Under **Artifacts registered in the temporary project**, confirm that the same filename appears with the type `text`. The first list confirms the command wrote the file. The second confirms NIPA registered it as an Artifact. Example Artifacts are scoped to the temporary test project.
 
 ## Create an fMRIPrep plugin in NIPA
 
 Build a separate draft called `fmriprep_tutorial` around fMRIPrep 25.2.4. You’ll check the package with a bundled example, then test preprocessing on one BIDS subject or session.
 
-1. Download the [fMRIPrep 1.0.0 plugin archive](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/fmriprep-1.0.0.nipa-plugin.tar.gz) and open or extract it with your archive manager. The `fmriprep/` folder contains the reference `plugin.yaml`, `run.sh`, and `adapter.py` used below.
-2. In **Plugin Store → Plugin Playground**, click **Create plugin**, enter `fmriprep_tutorial`, select **Apptainer container**, and click **Create source folder**. Keep the generated `example_input.txt`. If Playground is hidden, enable **Show Plugin Playground in Plugin Store** under **Administration → Overview**.
+1. Download the [fMRIPrep 1.0.1 plugin archive](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/fmriprep-1.0.1.nipa-plugin.tar.gz) and open or extract it with your archive manager. The `fmriprep/` folder contains the reference `plugin.yaml`, `run.sh`, and `adapter.py` used below.
+2. In **Plugin Store → Plugin Playground**, click **Create plugin**, enter `fmriprep_tutorial`, select **Apptainer container**, and click **Create source folder**. Keep the generated `example_input.txt`.
 3. Open **Edit draft** and replace the manifest with the reference `plugin.yaml`. Set `plugin.id` to `fmriprep_tutorial`, `plugin.name` to `fMRIPrep Tutorial`, and `implementation.outputs.root` to `derivatives/fmriprep_tutorial`. The distinct ID and output folder let the tutorial coexist with the installed fMRIPrep plugin.
 4. Move file discovery onto the matching Artifact output. Update `preprocessed_bold` under `transformation.outputs` as shown.
 
