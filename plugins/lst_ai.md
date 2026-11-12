@@ -1,12 +1,12 @@
 # LST-AI (CPU)
 
-**LST-AI (CPU)** · Plugin version 1.0.2 · Runtime 2.0.0rc1-cpu
+**LST-AI (CPU)** · Plugin version 1.0.3 · Runtime 2.0.0rc1-cpu
 
 CPU-only multiple-sclerosis lesion segmentation from paired T1w and FLAIR MRI.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/lst_ai-1.0.2.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/lst_ai-1.0.3.nipa-plugin.tar.gz)
 
-SHA-256: `69248b5555078b9872e298a63bf816287dadc1facf6f4c37c7bd3ed70a8e24a0`
+SHA-256: `51c18ed01eb76f616330c0e7ad7b71a3c582f41436da36f59cfa289bfe78703f`
 
 [Upstream project](https://github.com/CompImg/LST-AI)
 
@@ -16,9 +16,8 @@ SHA-256: `69248b5555078b9872e298a63bf816287dadc1facf6f4c37c7bd3ed70a8e24a0`
 
 - [README.md](#package-file-1)
 - [plugin.yaml](#package-file-2)
-- [__init__.py](#package-file-3)
-- [adapter.py](#package-file-4)
-- [run.sh](#package-file-5)
+- [adapter.py](#package-file-3)
+- [run.sh](#package-file-4)
 
 ### Package file 1
 
@@ -83,7 +82,7 @@ schema: nipa.plugin/v3
 plugin:
   id: lst_ai
   name: LST-AI (CPU)
-  version: 1.0.2
+  version: 1.0.3
   category: structural
   description: CPU-only multiple-sclerosis lesion segmentation from paired T1w and FLAIR MRI.
   repository: https://github.com/CompImg/LST-AI
@@ -212,14 +211,6 @@ upstream:
 
 ### Package file 3
 
-**__init__.py**
-
-```python
-"""NIPA LST-AI CPU plugin package."""
-```
-
-### Package file 4
-
 **adapter.py**
 
 ```python
@@ -299,7 +290,7 @@ def discover_artifacts(*, root: Path, definition: dict[str, Any], scan_payload: 
             )
 ```
 
-### Package file 5
+### Package file 4
 
 **run.sh**
 
