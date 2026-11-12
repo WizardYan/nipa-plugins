@@ -1,12 +1,12 @@
 # fMRIPrep
 
-**fMRIPrep** · Plugin version 1.0.0 · Runtime 25.2.4
+**fMRIPrep** · Plugin version 1.0.1 · Runtime 25.2.4
 
 BIDS-native preprocessing for resting-state and task functional MRI.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/fmriprep-1.0.0.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/fmriprep-1.0.1.nipa-plugin.tar.gz)
 
-SHA-256: `98caab763a71209e0b70f0001cab08a9c98fe5916bf649df8cecb2885dbcbdb5`
+SHA-256: `25acb370a4558a1e6e64d85a632e5c8b19eef171c357689698212aba17d9c9c2`
 
 [Upstream project](https://fmriprep.org/)
 
@@ -15,9 +15,8 @@ SHA-256: `98caab763a71209e0b70f0001cab08a9c98fe5916bf649df8cecb2885dbcbdb5`
 ## Package files
 
 - [plugin.yaml](#package-file-1)
-- [__init__.py](#package-file-2)
-- [adapter.py](#package-file-3)
-- [run.sh](#package-file-4)
+- [adapter.py](#package-file-2)
+- [run.sh](#package-file-3)
 
 ### Package file 1
 
@@ -28,7 +27,7 @@ schema: nipa.plugin/v3
 plugin:
   id: fmriprep
   name: fMRIPrep
-  version: 1.0.0
+  version: 1.0.1
   category: functional
   description: BIDS-native preprocessing for resting-state and task functional MRI.
 transformation:
@@ -216,12 +215,6 @@ ui:
 
 ### Package file 2
 
-**__init__.py**
-
-*Empty file.*
-
-### Package file 3
-
 **adapter.py**
 
 ```python
@@ -325,7 +318,7 @@ def discover_artifacts(*, root: Path, definition: dict[str, Any], scan_payload: 
         )
 ```
 
-### Package file 4
+### Package file 3
 
 **run.sh**
 
