@@ -1,12 +1,12 @@
 # FreeSurfer
 
-**FreeSurfer** · Plugin version 1.1.1 · Runtime 7.3.2
+**FreeSurfer** · Plugin version 1.1.2 · Runtime 7.3.2
 
 Standalone FreeSurfer 7.3.2 anatomical reconstruction using recon-all.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.1/freesurfer-1.1.1.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/freesurfer-1.1.2.nipa-plugin.tar.gz)
 
-SHA-256: `0f4afbab95d3b279476863f24dbaf997397c8cbbd62cb027a97c19c08a231dc5`
+SHA-256: `8b4f230a758f3c988ba8991ead66fe4fd5df96249afe9eb7a4cbd5d95481bf5b`
 
 [Upstream project](https://surfer.nmr.mgh.harvard.edu/)
 
@@ -15,9 +15,8 @@ SHA-256: `0f4afbab95d3b279476863f24dbaf997397c8cbbd62cb027a97c19c08a231dc5`
 ## Package files
 
 - [plugin.yaml](#package-file-1)
-- [__init__.py](#package-file-2)
-- [adapter.py](#package-file-3)
-- [run.sh](#package-file-4)
+- [adapter.py](#package-file-2)
+- [run.sh](#package-file-3)
 
 ### Package file 1
 
@@ -28,7 +27,7 @@ schema: nipa.plugin/v3
 plugin:
   id: freesurfer
   name: FreeSurfer
-  version: 1.1.1
+  version: 1.1.2
   category: structural
   description: Standalone FreeSurfer 7.3.2 anatomical reconstruction using recon-all.
 transformation:
@@ -98,14 +97,6 @@ implementation:
 
 ### Package file 2
 
-**__init__.py**
-
-```python
-"""NIPA official FreeSurfer plugin."""
-```
-
-### Package file 3
-
 **adapter.py**
 
 ```python
@@ -163,7 +154,7 @@ def discover_artifacts(*, root: Path, definition: dict[str, Any], scan_payload: 
         )
 ```
 
-### Package file 4
+### Package file 3
 
 **run.sh**
 
