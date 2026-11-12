@@ -1,12 +1,12 @@
 # XCP-D
 
-**XCP-D** · Plugin version 26.2.0 · Runtime 26.2.0
+**XCP-D** · Plugin version 26.2.1 · Runtime 26.2.0
 
 Containerized resting-state fMRI post-processing from compatible BIDS preprocessing derivatives.
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.0/xcp_d-26.2.0.nipa-plugin.tar.gz)
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.2/xcp_d-26.2.1.nipa-plugin.tar.gz)
 
-SHA-256: `6676cb72fcd4faeb87840ac25f64d07fc512479123efeaf33433d3fcb769e0b2`
+SHA-256: `a447410b28f1d05736329fcd1a572a68ac2d61d9b85854328dd2be0bb4655e65`
 
 [Upstream project](https://xcp-d.readthedocs.io/)
 
@@ -15,10 +15,9 @@ SHA-256: `6676cb72fcd4faeb87840ac25f64d07fc512479123efeaf33433d3fcb769e0b2`
 ## Package files
 
 - [plugin.yaml](#package-file-1)
-- [__init__.py](#package-file-2)
-- [adapter.py](#package-file-3)
-- [cli.py](#package-file-4)
-- [run.sh](#package-file-5)
+- [adapter.py](#package-file-2)
+- [cli.py](#package-file-3)
+- [run.sh](#package-file-4)
 
 ### Package file 1
 
@@ -29,7 +28,7 @@ schema: nipa.plugin/v3
 plugin:
   id: xcp_d
   name: XCP-D
-  version: 26.2.0
+  version: 26.2.1
   category: functional
   description: Containerized resting-state fMRI post-processing from compatible BIDS preprocessing derivatives.
 scientific_outputs:
@@ -359,14 +358,6 @@ ui:
 
 ### Package file 2
 
-**__init__.py**
-
-```python
-"""NIPA XCP-D post-processing plugin."""
-```
-
-### Package file 3
-
 **adapter.py**
 
 ```python
@@ -411,7 +402,7 @@ def discover_artifacts(*, root: Path, definition: dict[str, Any], scan_payload: 
         yield Artifact.from_dict(payload)
 ```
 
-### Package file 4
+### Package file 3
 
 **cli.py**
 
@@ -520,7 +511,7 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-### Package file 5
+### Package file 4
 
 **run.sh**
 
