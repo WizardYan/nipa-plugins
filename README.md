@@ -2,6 +2,10 @@
 
 Official plugin packages for NIPA (NeuroImaging Processing & Analytics). Find the seven `.nipa-plugin.tar.gz` archives under **Assets** on the [v2.3.2 release page](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.2).
 
+## Artifact contract reference
+
+Use the [NIPA Artifact contract reference](artifact-contract-types.md) to choose type IDs and declare what an input needs. It lists all 70 built-in types and gives examples for connecting neuroimaging plugins.
+
 ## Start with a manifest-only plugin
 
 1. In **Plugin Store → Plugin Playground**, click **Create plugin**. Enter `copy_text_tutorial`, keep the default **Command-line tool** template, and click **Create source folder**.
