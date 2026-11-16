@@ -40,10 +40,10 @@
     {
       "id": "mrtrix3",
       "name": "MRtrix3",
-      "version": "0.2.0",
-      "sha256": "f41e9c3a4c8f686f7b85e159a7bba4d8206ab27e31d6b58b23def5513e0a07bd",
+      "version": "0.2.1",
+      "sha256": "faa74d1b743e9e2916d393ac680a2c571f46e1d36b8d2b29c596b9352c6bd1f9",
       "runtime_version": "3.0.8",
-      "release_tag": "mrtrix3-v0.2.0",
+      "release_tag": "mrtrix3-v0.2.1",
       "min_nipa_version": "3.0.3"
     },
     {
