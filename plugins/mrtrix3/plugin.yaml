@@ -1,0 +1,94 @@
+schema: nipa.plugin/v3
+plugin:
+  id: mrtrix3
+  name: MRtrix3 · 3.0.8
+  version: 0.2.0
+  category: Diffusion MRI
+  description: Fit a diffusion tensor and derive FA, MD, AD, and RD maps from a diffusion MRI scan.
+upstream:
+  - name: MRtrix3
+    version: 3.0.8
+    runtime_requirement: mrtrix3-3.0.8
+    homepage: https://www.mrtrix.org/
+    repository: https://github.com/MRtrix3/mrtrix3
+    license: MPL-2.0
+    redistribution: {mode: site_provided, permitted: false}
+transformation:
+  inputs:
+    dwi:
+      type: imaging.mri.diffusion.dwi
+      source: artifact
+      cardinality: one
+      label: Diffusion MRI with matching bvec and bval files
+    parcellation:
+      type: imaging.mri.anatomical.segmentation
+      required: false
+      label: Integer brain parcellation aligned to the DWI grid
+      constraints:
+        same_grid_as: dwi
+        required_when: {connectome: true}
+  parameters:
+    tractography:
+      type: boolean
+      default: false
+      description: Estimate a white matter FOD and run whole-brain iFOD2 tractography after tensor fitting.
+    connectome:
+      type: boolean
+      default: false
+      description: Enables tractography and builds a streamline-count matrix from an aligned parcellation.
+  outputs:
+    fa:
+      type: imaging.mri.diffusion.scalar_map
+      attributes: {metric: FA, model: DTI}
+      files: {patterns: ['*_FA.nii.gz'], label: Fractional anisotropy}
+    md:
+      type: imaging.mri.diffusion.scalar_map
+      attributes: {metric: MD, model: DTI}
+      files: {patterns: ['*_MD.nii.gz'], label: Mean diffusivity}
+    ad:
+      type: imaging.mri.diffusion.scalar_map
+      attributes: {metric: AD, model: DTI}
+      files: {patterns: ['*_AD.nii.gz'], label: Axial diffusivity}
+    rd:
+      type: imaging.mri.diffusion.scalar_map
+      attributes: {metric: RD, model: DTI}
+      files: {patterns: ['*_RD.nii.gz'], label: Radial diffusivity}
+    fod:
+      type: imaging.mri.diffusion.orientation
+      attributes: {representation: orientation_distribution, model: CSD}
+      when: {tractography: true}
+      files: {patterns: ['*_wmfod.mif']}
+    tractogram:
+      type: imaging.mri.diffusion.tractography
+      attributes: {representation: tractogram, algorithm: iFOD2}
+      when: {tractography: true}
+      files: {patterns: ['*_tracks.tck']}
+    matrix:
+      type: imaging.mri.diffusion.connectivity
+      attributes: {representation: matrix, weight: streamline_count}
+      when: {connectome: true}
+      files: {patterns: ['*_connectome.csv']}
+    assignments:
+      type: table.statistics
+      when: {connectome: true}
+      files: {patterns: ['*_assignments.txt']}
+  capability:
+    title: Diffusion tensor fitting
+    native_engine: mrtrix3
+implementation:
+  entrypoint: run.sh
+  resources: {cpus: 4, memory_gb: 8, time: '02:00:00'}
+  runtime:
+    requirements:
+      - id: mrtrix3-3.0.8
+        kind: container
+        version: 3.0.8
+        acquisition: site_provided
+        binding_env: MRTRIX3_SIF
+        discovery:
+          filename_patterns: ['*mrtrix3*3.0.8*.sif']
+        runtimes: [apptainer, singularity]
+  outputs:
+    root: derivatives/mrtrix3
+ui:
+  modalities: [dwi]
