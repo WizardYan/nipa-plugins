@@ -22,20 +22,20 @@
     {
       "id": "freesurfer",
       "name": "FreeSurfer",
-      "version": "1.1.2",
-      "sha256": "8b4f230a758f3c988ba8991ead66fe4fd5df96249afe9eb7a4cbd5d95481bf5b",
+      "version": "1.1.3",
+      "sha256": "dca20e6952cc81e7a5ffa58bdaf7c74309332c0307a9267d3100a41e1d3a8b1e",
       "runtime_version": "7.3.2",
-      "release_tag": "v2.3.2",
-      "min_nipa_version": "3.0.0"
+      "release_tag": "v2.3.3",
+      "min_nipa_version": "3.0.7"
     },
     {
       "id": "lst_ai",
       "name": "LST-AI (CPU)",
-      "version": "1.0.3",
-      "sha256": "51c18ed01eb76f616330c0e7ad7b71a3c582f41436da36f59cfa289bfe78703f",
+      "version": "1.0.4",
+      "sha256": "e60111dc241793e7aaeb9c9dfb7674143c5f41b086fc34404190f0b0ce1a221f",
       "runtime_version": "2.0.0rc1-cpu",
-      "release_tag": "v2.3.2",
-      "min_nipa_version": "3.0.0"
+      "release_tag": "v2.3.3",
+      "min_nipa_version": "3.0.7"
     },
     {
       "id": "mrtrix3",
@@ -58,20 +58,20 @@
     {
       "id": "tracula",
       "name": "TRACULA",
-      "version": "1.1.2",
-      "sha256": "bb1e2bccdeee5770e4463d4c7ed41dcdb79030fcd8cecb7e274b3765cf9e99dd",
+      "version": "1.1.3",
+      "sha256": "93ab9f56f089834de937495f511675e6764105d28512de0175fd572d2ba90cc1",
       "runtime_version": "7.3.2",
-      "release_tag": "v2.3.2",
-      "min_nipa_version": "3.0.0"
+      "release_tag": "v2.3.3",
+      "min_nipa_version": "3.0.7"
     },
     {
       "id": "xcp_d",
       "name": "XCP-D",
-      "version": "26.2.1",
-      "sha256": "a447410b28f1d05736329fcd1a572a68ac2d61d9b85854328dd2be0bb4655e65",
+      "version": "26.2.2",
+      "sha256": "07585ca9f8f21142eb0e52e4d280ef7f84aef7f97630a6d0120ebe045d7ec086",
       "runtime_version": "26.2.0",
-      "release_tag": "v2.3.2",
-      "min_nipa_version": "3.0.0"
+      "release_tag": "v2.3.3",
+      "min_nipa_version": "3.0.7"
     }
   ]
 }
