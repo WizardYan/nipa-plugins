@@ -40,11 +40,11 @@
     {
       "id": "mrtrix3",
       "name": "MRtrix3",
-      "version": "0.2.3",
-      "sha256": "6a8722e5e20a0f9fbac026084bf2cc804c5e6f1363bdb7bf13e63f2c2c11b766",
+      "version": "0.3.0",
+      "sha256": "e7a94c0e28c0408ad65e8c87d2c7313034164c9d8353b4e60adb058144a185dc",
       "runtime_version": "3.0.8",
-      "release_tag": "mrtrix3-v0.2.3",
-      "min_nipa_version": "3.0.8"
+      "release_tag": "mrtrix3-v0.3.0",
+      "min_nipa_version": "3.0.12"
     },
     {
       "id": "thalamic_nuclei",
