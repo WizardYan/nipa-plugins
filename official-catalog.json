@@ -72,6 +72,33 @@
       "runtime_version": "26.2.0",
       "release_tag": "v2.3.3",
       "min_nipa_version": "3.0.7"
+    },
+    {
+      "id": "fmriprep",
+      "name": "fMRIPrep",
+      "version": "1.0.5",
+      "sha256": "1c1dcb4cc7bcd79a9fad9a1cce7f78dbe778af613cc5b8840128ab0729a59220",
+      "runtime_version": "25.2.4",
+      "release_tag": "v2.3.4",
+      "min_nipa_version": "3.0.14"
+    },
+    {
+      "id": "mrtrix3",
+      "name": "MRtrix3",
+      "version": "0.3.1",
+      "sha256": "3c93e2f20b80e52b2fff6e4ef8f004dba242072f49263bb924a33ad7bf989920",
+      "runtime_version": "3.0.8",
+      "release_tag": "v2.3.4",
+      "min_nipa_version": "3.0.14"
+    },
+    {
+      "id": "xcp_d",
+      "name": "XCP-D",
+      "version": "26.2.3",
+      "sha256": "2b56e274f0054969cf79d8efc101da8293c22b94da26d7b8e7c58e4e3d9eda02",
+      "runtime_version": "26.2.0",
+      "release_tag": "v2.3.4",
+      "min_nipa_version": "3.0.14"
     }
   ]
 }
