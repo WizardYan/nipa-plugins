@@ -1,8 +1,8 @@
 schema: nipa.plugin/v3
 plugin:
   id: mrtrix3
-  name: MRtrix3 · 3.0.8
-  version: 0.2.0
+  name: MRtrix3
+  version: 0.3.1
   category: Diffusion MRI
   description: Fit a diffusion tensor and derive FA, MD, AD, and RD maps from a diffusion MRI scan.
 upstream:
@@ -12,7 +12,7 @@ upstream:
     homepage: https://www.mrtrix.org/
     repository: https://github.com/MRtrix3/mrtrix3
     license: MPL-2.0
-    redistribution: {mode: site_provided, permitted: false}
+    redistribution: {mode: reference_only, permitted: false}
 transformation:
   inputs:
     dwi:
@@ -26,16 +26,51 @@ transformation:
       label: Integer brain parcellation aligned to the DWI grid
       constraints:
         same_grid_as: dwi
-        required_when: {connectome: true}
+        required_when: {connectome: true, parcellation_source: aligned}
+    reconstruction:
+      type: imaging.mri.anatomical.reconstruction
+      required: false
+      label: FreeSurfer reconstruction for the selected DWI
+      attributes: {method: freesurfer, representation: anatomical_reconstruction}
+      constraints:
+        required_when: {connectome: true, parcellation_source: freesurfer}
   parameters:
     tractography:
       type: boolean
       default: false
       description: Estimate a white matter FOD and run whole-brain iFOD2 tractography after tensor fitting.
+      control:
+        type: checkbox
+      set_when:
+        parameter: connectome
+        equals: true
+        value: true
+      enabled_when:
+        parameter: connectome
+        equals: false
+      label: Tractography
     connectome:
       type: boolean
       default: false
-      description: Enables tractography and builds a streamline-count matrix from an aligned parcellation.
+      description: Enables tractography and builds a streamline-count matrix from the selected parcellation
+        source.
+      control:
+        type: checkbox
+      label: Connectome
+    parcellation_source:
+      type: enum
+      default: aligned
+      description: Choose an existing DWI-aligned label image or prepare one from a FreeSurfer reconstruction.
+      values:
+        aligned: Existing aligned parcellation
+        freesurfer: FreeSurfer reconstruction
+      enabled_when:
+        parameter: connectome
+        equals: true
+      option_labels:
+        aligned: Existing aligned parcellation
+        freesurfer: FreeSurfer reconstruction
+      label: Parcellation source
   outputs:
     fa:
       type: imaging.mri.diffusion.scalar_map
@@ -72,22 +107,48 @@ transformation:
       type: table.statistics
       when: {connectome: true}
       files: {patterns: ['*_assignments.txt']}
+    prepared_parcellation:
+      type: imaging.mri.anatomical.segmentation
+      attributes: {space: dwi, method: freesurfer}
+      when: {connectome: true, parcellation_source: freesurfer}
+      files: {patterns: ['*_nodes_dwi.nii.gz']}
+    parcellation_registration:
+      type: transform
+      attributes: {from_space: T1w, to_space: dwi, transform_type: affine}
+      when: {connectome: true, parcellation_source: freesurfer}
+      files: {patterns: ['*_freesurfer_to_dwi.mat']}
+    node_lookup:
+      type: text
+      when: {connectome: true, parcellation_source: freesurfer}
+      files: {patterns: ['*_node_labels.txt']}
   capability:
     title: Diffusion tensor fitting
     native_engine: mrtrix3
 implementation:
   entrypoint: run.sh
-  resources: {cpus: 4, memory_gb: 8, time: '02:00:00'}
+  resources:
+    cpus: 4
+    memory_gb: 16
+    time: '04:00:00'
+    when_any_enabled:
+      parameters: [tractography, connectome]
+      cpus: 8
+      memory_gb: 32
+      time: '08:00:00'
   runtime:
     requirements:
       - id: mrtrix3-3.0.8
         kind: container
         version: 3.0.8
-        acquisition: site_provided
+        acquisition: managed
         binding_env: MRTRIX3_SIF
         discovery:
           filename_patterns: ['*mrtrix3*3.0.8*.sif']
-        runtimes: [apptainer, singularity]
+        runtimes: [singularity, apptainer]
+        sources:
+          - uri: docker://mrtrix3/mrtrix3@sha256:a06f1463923d1bb748c5bba09ca1daaf2266802a84e161ba4b28238396afe82a
+            digest: sha256:a06f1463923d1bb748c5bba09ca1daaf2266802a84e161ba4b28238396afe82a
+            official: true
   outputs:
     root: derivatives/mrtrix3
 ui:
