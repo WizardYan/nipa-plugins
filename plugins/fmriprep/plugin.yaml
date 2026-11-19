@@ -1,0 +1,258 @@
+schema: nipa.plugin/v3
+plugin:
+  id: fmriprep
+  name: fMRIPrep
+  version: 1.0.5
+  category: functional
+  description: BIDS-native preprocessing for resting-state and task functional MRI.
+transformation:
+  inputs:
+    bold:
+      type: imaging.mri.functional.bold
+      source: dataset
+      cardinality: many
+    t1w:
+      type: imaging.mri.anatomical.image
+      source: dataset
+      required: false
+      attributes:
+        contrast: T1w
+  outputs:
+    preprocessed_bold:
+      type: imaging.mri.functional.bold
+      attributes:
+        processing_state: preprocessed
+    preprocessed_t1w:
+      type: imaging.mri.anatomical.image
+      attributes:
+        contrast: T1w
+        processing_state: preprocessed
+    confounds:
+      type: imaging.mri.functional.timeseries
+      attributes:
+        representation: confounds
+    freesurfer_reconstruction:
+      type: imaging.mri.anatomical.reconstruction
+      virtual: true
+      attributes:
+        representation: anatomical_reconstruction
+        method: freesurfer
+    derivatives_dataset:
+      type: dataset.derivatives.bids
+      virtual: true
+      attributes:
+        standard: BIDS
+        dataset_type: derivative
+        processing_state: preprocessed
+        pipeline_name: fmriprep
+  parameters:
+    ignore:
+      type: string
+      default: ''
+      description: Space-separated choices from fieldmaps, slicetiming, sbref, t2w, flair, fmap-jacobian.
+      control:
+        type: multiselect
+        choices:
+        - value: fieldmaps
+          label: Field maps (fieldmaps)
+        - value: slicetiming
+          label: Slice timing correction (slicetiming)
+        - value: sbref
+          label: Single-band reference images (sbref)
+        - value: t2w
+          label: T2-weighted images (t2w)
+        - value: flair
+          label: FLAIR images (flair)
+        - value: fmap-jacobian
+          label: Fieldmap Jacobian modulation (fmap-jacobian)
+      label: Ignore
+    output_spaces:
+      type: string
+      default: ''
+      description: Space-separated spatial references. Blank uses the fMRIPrep default (MNI152NLin2009cAsym
+        at native BOLD resolution).
+      control:
+        type: multiselect
+        choices:
+        - value: MNI152NLin2009cAsym
+          label: MNI152NLin2009cAsym
+        - value: MNI152NLin6Asym
+          label: MNI152NLin6Asym
+        - value: T1w
+          label: T1w
+        - value: func
+          label: func
+        - value: fsnative
+          label: fsnative
+        - value: fsaverage
+          label: fsaverage
+        allow_custom: true
+        custom_label: Custom TemplateFlow spaces
+        custom_placeholder: MNIPediatricAsym:res-1:cohort-2
+        empty_hint: Use fMRIPrep default — MNI152NLin2009cAsym at the original BOLD resolution.
+        selected_hint: Using selected spaces. Clear all choices to use the fMRIPrep default.
+      label: Output spaces
+    bold2anat_dof:
+      type: enum
+      default: '6'
+      values:
+      - '6'
+      - '9'
+      - '12'
+      description: Degrees of freedom for BOLD to anatomical registration.
+      label: BOLD to anatomical registration DOF
+    slice_time_ref:
+      type: number
+      default: 0.5
+      minimum: 0
+      maximum: 1
+      description: Slice timing reference as a fraction of the acquisition interval.
+      control:
+        type: select
+        choices:
+        - value: 0
+          label: Start (0)
+        - value: 0.5
+          label: Middle (0.5)
+        - value: 1
+          label: End (1)
+      label: Slice timing reference
+    cifti_output:
+      type: enum
+      default: 'off'
+      values:
+      - 'off'
+      - 91k
+      - 170k
+      description: Write a CIFTI dense time series at the selected density. Find it in Data by folder.
+      set_when:
+        parameter: fs_no_reconall
+        equals: true
+        value: 'off'
+      enabled_when:
+        parameter: fs_no_reconall
+        equals: false
+      label: CIFTI output
+    fd_spike_threshold:
+      type: number
+      default: 0.5
+      minimum: 0
+      description: Framewise displacement threshold in millimeters.
+      label: FD spike threshold (mm)
+    dvars_spike_threshold:
+      type: number
+      default: 1.5
+      minimum: 0
+      description: Standardized DVARS threshold for flagging volumes.
+      label: DVARS spike threshold
+    skull_strip_template:
+      type: string
+      default: OASIS30ANTs
+      description: TemplateFlow reference used for anatomical brain extraction.
+      label: Skull stripping template
+    skull_strip_fixed_seed:
+      type: boolean
+      default: false
+      description: Use a fixed seed for skull stripping.
+      label: Fixed skull stripping seed
+    skull_strip_t1w:
+      type: enum
+      default: force
+      values:
+      - auto
+      - skip
+      - force
+      description: Control T1w skull stripping.
+      label: T1w skull stripping
+    fs_license_file:
+      type: path
+      default: ''
+      description: Absolute server path to a license file. Blank uses the license configured in Plugin Store.
+      label: FreeSurfer license file
+    fs_subjects_dir:
+      type: path
+      default: ''
+      description: Absolute server path to an existing writable FreeSurfer subjects directory. Blank uses
+        the native output layout. Custom directories are outside NIPA's reconstruction scan.
+      label: FreeSurfer subjects directory
+    fs_no_reconall:
+      type: boolean
+      default: false
+      description: CIFTI output requires reconstruction.
+      control:
+        type: select
+        choices:
+        - value: false
+          label: Run reconstruction (default)
+        - value: true
+          label: Skip reconstruction
+      label: FreeSurfer reconstruction
+  capability:
+    title: Functional MRI preprocessing
+    goal: Preprocess BOLD data using a BIDS-native workflow
+implementation:
+  entrypoint: run.sh
+  enabled: true
+  resources:
+    cpus: 16
+    memory_gb: 64
+    time: '48:00:00'
+    gpu_count: 0
+    scratch_gb: 100
+  runtime:
+    requirements:
+    - id: fmriprep-25.2.4
+      kind: container
+      version: 25.2.4
+      acquisition: managed
+      binding_env: FMRIPREP_SIF
+      discovery:
+        filename_patterns:
+        - '*fmriprep*25.2.4*.sif'
+        - '*fmriprep*.sif'
+      runtimes:
+      - apptainer
+      - singularity
+      sources:
+      - uri: docker://nipreps/fmriprep@sha256:37ca2547caba3aa0b7c01434bc7924a7497e097deb9da6de041cd990abc6b475
+        digest: sha256:37ca2547caba3aa0b7c01434bc7924a7497e097deb9da6de041cd990abc6b475
+        official: true
+        approximate_size_gb: 2.47
+    licenses:
+    - id: freesurfer
+      required: true
+      env: FS_LICENSE
+      target: /license.txt
+  outputs:
+    root: derivatives/fmriprep
+    environment: FMRIPREP_OUT_ROOT
+    formats:
+    - id: preprocessed_bold
+      label: Preprocessed BOLD
+      group: Functional
+      patterns:
+      - '*desc-preproc_bold.nii'
+      - '*desc-preproc_bold.nii.gz'
+    - id: preprocessed_t1w
+      label: Preprocessed T1w
+      group: Anatomy
+      patterns:
+      - '*desc-preproc_T1w.nii'
+      - '*desc-preproc_T1w.nii.gz'
+      - '*desc-preproc_t1w.nii'
+      - '*desc-preproc_t1w.nii.gz'
+    - id: confounds
+      label: Confounds time series
+      group: Functional
+      patterns:
+      - '*desc-confounds_timeseries.tsv'
+      - '*desc-confounds_regressors.tsv'
+    exclude:
+    - work/**
+    - '**/work/**'
+    - .nipa_complete/**
+    - '**/.nipa_complete/**'
+    artifact_adapter: adapter.py:discover_artifacts
+ui:
+  modalities:
+  - func
