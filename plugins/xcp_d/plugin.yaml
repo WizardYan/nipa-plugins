@@ -1,0 +1,529 @@
+schema: nipa.plugin/v3
+plugin:
+  id: xcp_d
+  name: XCP-D
+  version: 26.2.3
+  category: functional
+  description: Containerized resting-state fMRI post-processing from compatible BIDS preprocessing derivatives.
+scientific_outputs:
+- id: functional.denoised_bold
+  label: Denoised BOLD
+  description: Analysis-ready BOLD after functional post-processing.
+  category: Functional MRI
+  tags: [postprocessing, bold]
+  educational_summary: Reduces nuisance and motion-related effects before downstream analysis.
+  requirement:
+    type: imaging.mri.functional.bold
+    attributes: {processing_state: postprocessed, denoised: true}
+- id: functional.connectivity_matrix
+  label: Functional connectivity matrix
+  description: Pairwise functional connectivity estimates between regions.
+  category: Functional MRI
+  tags: [connectivity, resting-state]
+  requirement:
+    type: imaging.mri.functional.connectivity
+    attributes: {representation: matrix, measure: pearson_correlation, processing_state: postprocessed}
+- id: functional.alff
+  label: ALFF map
+  description: Amplitude of low-frequency fluctuation map.
+  category: Functional MRI
+  tags: [resting-state, alff]
+  requirement:
+    type: imaging.mri.functional.intrinsic_activity
+    attributes: {metric: ALFF, processing_state: postprocessed}
+- id: functional.reho
+  label: ReHo map
+  description: Regional homogeneity map.
+  category: Functional MRI
+  tags: [resting-state, reho]
+  requirement:
+    type: imaging.mri.functional.intrinsic_activity
+    attributes: {metric: ReHo, processing_state: postprocessed}
+transformation:
+  inputs:
+    derivatives:
+      type: dataset.derivatives.bids
+      source: artifact
+      cardinality: one
+      label: Functional MRI preprocessing derivatives
+      attributes:
+        standard: BIDS
+        processing_state: preprocessed
+  outputs:
+    denoised_bold:
+      type: imaging.mri.functional.bold
+      attributes:
+        processing_state: postprocessed
+        denoised: true
+        method: xcp_d
+    parcellated_timeseries:
+      type: imaging.mri.functional.timeseries
+      attributes:
+        representation: parcel
+        processing_state: postprocessed
+        method: xcp_d
+    connectivity:
+      type: imaging.mri.functional.connectivity
+      attributes:
+        representation: matrix
+        measure: pearson_correlation
+        processing_state: postprocessed
+        method: xcp_d
+    alff:
+      type: imaging.mri.functional.intrinsic_activity
+      attributes:
+        metric: ALFF
+        processing_state: postprocessed
+        method: xcp_d
+    reho:
+      type: imaging.mri.functional.intrinsic_activity
+      attributes:
+        metric: ReHo
+        processing_state: postprocessed
+        method: xcp_d
+    qc:
+      type: qc
+      attributes:
+        scope: functional_mri
+        method: xcp_d
+    report:
+      type: report
+      attributes:
+        report_type: functional_postprocessing
+        format: html
+        method: xcp_d
+    metadata:
+      type: metadata
+      attributes:
+        scope: functional_mri
+        method: xcp_d
+  parameters:
+    mode:
+      type: enum
+      default: nichart
+      description: Settings using preset defaults update when the preset changes. Manual settings require explicit choices.
+      values:
+        linc: linc
+        abcd: abcd
+        nichart: nichart
+        none: none
+      label: Processing preset
+      option_labels: {nichart: NiChart, linc: LINC, abcd: ABCD, none: Manual settings}
+    file_format:
+      type: enum
+      default: auto
+      description: Select the preset default or explicitly choose the input/output representation.
+      values:
+        auto: auto
+        nifti: nifti
+        cifti: cifti
+      label: File format
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "nifti"
+            label: "NIfTI"
+          linc:
+            value: "cifti"
+            label: "CIFTI"
+          abcd:
+            value: "cifti"
+            label: "CIFTI"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+    nuisance_regressors:
+      type: enum
+      default: auto
+      description: Select the preset default or a specific confound regression strategy.
+      values:
+        auto: auto
+        24P: 24P
+        27P: 27P
+        36P: 36P
+        acompcor: acompcor
+        acompcor_gsr: acompcor_gsr
+        aroma: aroma
+        aroma_gsr: aroma_gsr
+        gsr_only: gsr_only
+        none: none
+      label: Nuisance regression
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "36P"
+            label: "36P"
+          linc:
+            value: "36P"
+            label: "36P"
+          abcd:
+            value: "36P"
+            label: "36P"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+    fd_thresh:
+      type: string
+      default: auto
+      description: Set to 0 to disable motion censoring. Leave blank to use the preset default.
+      label: Motion censoring threshold (mm)
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "0"
+            label: "0 mm (censoring off)"
+          linc:
+            value: "0"
+            label: "0 mm (censoring off)"
+          abcd:
+            value: "0.3"
+            label: "0.3 mm"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+    min_time:
+      type: string
+      default: auto
+      description: Minimum retained low-motion duration. Applies when motion censoring is enabled.
+      label: Minimum retained duration (seconds)
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "0"
+            label: "0 seconds"
+          linc:
+            value: "0"
+            label: "0 seconds"
+          abcd:
+            value: "240"
+            label: "240 seconds"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+      inactive_when:
+        parameter: fd_thresh
+        lte: 0
+        message: Motion censoring is off. Minimum retained duration is inactive.
+    smoothing:
+      type: string
+      default: auto
+      description: Gaussian kernel width. Set to 0 to disable smoothing. Leave blank to use the preset default.
+      label: Spatial smoothing (mm FWHM)
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "0"
+            label: "0 mm (off)"
+          linc:
+            value: "6"
+            label: "6 mm FWHM"
+          abcd:
+            value: "6"
+            label: "6 mm FWHM"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+    despike:
+      type: enum
+      default: auto
+      values:
+        auto: auto
+        'yes': y
+        'no': n
+      label: Despiking
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "yes"
+            label: "On"
+          linc:
+            value: "yes"
+            label: "On"
+          abcd:
+            value: "yes"
+            label: "On"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+    combine_runs:
+      type: enum
+      default: auto
+      values:
+        auto: auto
+        'yes': y
+        'no': n
+      label: Combine runs
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "no"
+            label: "Keep runs separate"
+          linc:
+            value: "no"
+            label: "Keep runs separate"
+          abcd:
+            value: "yes"
+            label: "Combine runs"
+          none:
+            value: null
+            label: "Choose an explicit value in Manual settings"
+    bandpass_filter:
+      type: enum
+      default: auto
+      values:
+        auto: auto
+        enabled: enabled
+        disabled: disabled
+      label: Bandpass filtering
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "enabled"
+            label: "On"
+          linc:
+            value: "enabled"
+            label: "On"
+          abcd:
+            value: "enabled"
+            label: "On"
+          none:
+            value: "enabled"
+            label: "On"
+    lower_bpf:
+      type: string
+      default: auto
+      description: High-pass cutoff. Leave blank to use the preset default.
+      label: High-pass cutoff (Hz)
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "0.01"
+            label: "0.01 Hz"
+          linc:
+            value: "0.01"
+            label: "0.01 Hz"
+          abcd:
+            value: "0.01"
+            label: "0.01 Hz"
+          none:
+            value: "0.01"
+            label: "0.01 Hz"
+    upper_bpf:
+      type: string
+      default: auto
+      description: Low-pass cutoff. Leave blank to use the preset default.
+      label: Low-pass cutoff (Hz)
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: "0.08"
+            label: "0.08 Hz"
+          linc:
+            value: "0.08"
+            label: "0.08 Hz"
+          abcd:
+            value: "0.08"
+            label: "0.08 Hz"
+          none:
+            value: "0.08"
+            label: "0.08 Hz"
+    atlases:
+      type: string
+      default: auto
+      description: Space- or comma-separated atlas names. Leave blank to use the built-in atlas set.
+      label: Atlases
+      default_from:
+        parameter: mode
+        sentinel: auto
+        values:
+          nichart:
+            value: ""
+            label: "Built-in atlas set"
+          linc:
+            value: ""
+            label: "Built-in atlas set"
+          abcd:
+            value: ""
+            label: "Built-in atlas set"
+          none:
+            value: ""
+            label: "Built-in atlas set"
+    skip_outputs:
+      type: string
+      default: ''
+      description: Optional comma/space-separated subset of alff,reho,parcellation,connectivity.
+      label: Skip outputs
+  capability:
+    title: Resting-state fMRI post-processing
+    goal: Produce denoised and analysis-ready functional representations from preprocessing derivatives
+    abstraction: artifact-to-native-adapter
+    native_engine: xcp_d
+  education:
+    summary: Denoises preprocessed functional MRI and produces standardized resting-state derivatives.
+    why: Motion censoring and nuisance regression reduce non-neural variation in downstream measures.
+    considerations:
+    - Denoising choices can materially affect connectivity estimates.
+implementation:
+  entrypoint: run.sh
+  enabled: true
+  resources:
+    cpus: 8
+    memory_gb: 96
+    time: '24:00:00'
+    gpu_count: 0
+    scratch_gb: 100
+  runtime:
+    requirements:
+    - id: xcp-d-26.2.0
+      kind: container
+      version: 26.2.0
+      acquisition: managed
+      binding_env: XCPD_SIF
+      discovery:
+        filename_patterns:
+        - '*xcp*d*26.2.0*.sif'
+        - '*xcp_d*.sif'
+        - '*xcp-d*.sif'
+      runtimes:
+      - singularity
+      - apptainer
+      sources:
+      - uri: docker://pennlinc/xcp_d@sha256:a919b121d1da8e090bfb3594f49ffeb5ddf2ab491327b04a7b8a1f304b64e7ca
+        digest: sha256:a919b121d1da8e090bfb3594f49ffeb5ddf2ab491327b04a7b8a1f304b64e7ca
+        official: true
+        approximate_size_gb: 2.33
+      capabilities:
+      - xcp_d.postprocessing
+    licenses:
+    - id: freesurfer
+      required: false
+      env: FS_LICENSE
+      target: /license.txt
+  outputs:
+    root: derivatives/xcp_d
+    environment: XCPD_OUT_ROOT
+    formats:
+    - id: denoised_bold
+      label: Denoised BOLD
+      group: Functional
+      patterns:
+      - '*desc-denoised_bold.nii.gz'
+      - '*desc-denoisedSmoothed_bold.nii.gz'
+      - '*desc-denoised_bold.dtseries.nii'
+      - '*desc-denoisedSmoothed_bold.dtseries.nii'
+    - id: parcellated_timeseries
+      label: Parcellated time series
+      group: Time series
+      patterns:
+      - '*stat-mean_timeseries.tsv'
+      - '*stat-mean_timeseries.ptseries.nii'
+    - id: connectivity
+      label: Functional connectivity matrix
+      group: Connectivity
+      patterns:
+      - '*stat-pearsoncorrelation*_relmat.tsv'
+      - '*stat-pearsoncorrelation*_boldmap.pconn.nii'
+    - id: alff
+      label: ALFF
+      group: Functional measures
+      patterns:
+      - '*stat-alff*_boldmap.nii.gz'
+      - '*stat-alff*_boldmap.dscalar.nii'
+    - id: reho
+      label: ReHo
+      group: Functional measures
+      patterns:
+      - '*stat-reho*_boldmap.nii.gz'
+      - '*stat-reho*_boldmap.dscalar.nii'
+    - id: qc
+      label: Functional quality control
+      group: Quality control
+      patterns:
+      - '*desc-linc_qc.tsv'
+      - '*desc-abcc_qc.csv'
+      - '*desc-abcc_qc.tsv'
+    - id: report
+      label: XCP-D visual report
+      group: Reports
+      role: report
+      patterns:
+      - '*.html'
+      - '*.htm'
+    - id: metadata
+      label: XCP-D metadata
+      group: Metadata
+      patterns:
+      - 'dataset_description.json'
+      - '*desc-denoised_bold.json'
+      - '*desc-denoisedSmoothed_bold.json'
+      - '*outliers.tsv'
+      - '*design.tsv'
+    exclude:
+    - work/**
+    - '**/work/**'
+    - .nipa_complete/**
+    - '**/.nipa_complete/**'
+    artifact_adapter: adapter.py:discover_artifacts
+  stages:
+  - id: denoise
+    label: Denoising and nuisance regression
+    produces:
+    - imaging.mri.functional.bold
+  - id: measures
+    label: Resting-state functional measures
+    depends_on:
+    - denoise
+    produces:
+    - imaging.mri.functional.intrinsic_activity
+  - id: parcellation
+    label: Atlas parcellation
+    depends_on:
+    - denoise
+    produces:
+    - imaging.mri.functional.timeseries
+  - id: connectivity
+    label: Functional connectivity
+    depends_on:
+    - parcellation
+    produces:
+    - imaging.mri.functional.connectivity
+  - id: qc
+    label: Quality control and reports
+    depends_on:
+    - denoise
+    produces:
+    - qc
+    - report
+  provenance:
+    native_engine: xcp_d
+    capture:
+    - resolved_inputs
+    - parameters
+    - runtime_requirements
+    - resource_request
+    - execution_identity
+    - stage_sequence
+    portable_spec: true
+ui:
+  modalities:
+  - func
