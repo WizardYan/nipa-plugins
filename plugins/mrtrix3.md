@@ -1,12 +1,19 @@
 # MRtrix3
 
-Plugin v0.2.0 uses the MRtrix3 3.0.8 runtime. It fits diffusion tensors and optionally runs tractography and generates a structural connectome.
+Plugin version **0.3.1** · Runtime **3.0.8** · Requires **NIPA 3.0.14 or newer**
 
-- [Usage and runtime setup](mrtrix3/README.md)
-- [Plugin manifest](mrtrix3/plugin.yaml)
-- [Launcher](mrtrix3/run.sh)
-- [Download the NIPA package](https://github.com/WizardYan/nipa-plugins/releases/download/mrtrix3-v0.2.0/mrtrix3-0.2.0.nipa-plugin.tar.gz)
+Fit a diffusion tensor and derive FA, MD, AD, and RD maps from a diffusion MRI scan.
 
-SHA-256: `f41e9c3a4c8f686f7b85e159a7bba4d8206ab27e31d6b58b23def5513e0a07bd`
+Parameter controls and dependency rules are declared in `plugin.yaml`.
 
-The checkboxes and conditional parcellation review require a NIPA build that includes the MRtrix3 planning update.
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.4/mrtrix3-0.3.1.nipa-plugin.tar.gz)
+
+SHA-256 `3c93e2f20b80e52b2fff6e4ef8f004dba242072f49263bb924a33ad7bf989920`
+
+## Documentation and package files
+
+- [README.md](mrtrix3/README.md)
+- [plugin.yaml](mrtrix3/plugin.yaml)
+- [run.sh](mrtrix3/run.sh)
+
+[All official plugins](../official-plugins.md)
