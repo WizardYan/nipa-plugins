@@ -1,0 +1,75 @@
+schema: nipa.plugin/v3
+plugin:
+  id: freesurfer
+  name: FreeSurfer
+  version: 1.1.4
+  category: structural
+  description: Standalone FreeSurfer 7.3.2 anatomical reconstruction using recon-all.
+transformation:
+  inputs:
+    t1w:
+      type: imaging.mri.anatomical.image
+      source: dataset
+      cardinality: one
+      label: T1-weighted anatomical MRI
+      attributes:
+        contrast: T1w
+  outputs:
+    reconstruction:
+      type: imaging.mri.anatomical.reconstruction
+      attributes:
+        representation: anatomical_reconstruction
+        method: freesurfer
+  capability:
+    title: FreeSurfer anatomical reconstruction
+    goal: Generate a reusable FreeSurfer subject reconstruction from T1w MRI
+implementation:
+  entrypoint: run.sh
+  enabled: true
+  resources:
+    cpus: 8
+    memory_gb: 32
+    time: '48:00:00'
+    gpu_count: 0
+    scratch_gb: 64
+  runtime:
+    requirements:
+    - id: freesurfer-7.3.2
+      kind: container
+      version: 7.3.2
+      acquisition: managed
+      binding_env: FREESURFER_SIF
+      discovery:
+        filename_patterns:
+        - '*freesurfer*7.3.2*.sif'
+        - '*Freesurfer*7.3.2*.sif'
+        - '*freesurfer*.sif'
+      runtimes:
+      - singularity
+      - apptainer
+      sources:
+      - uri: docker://freesurfer/freesurfer@sha256:e04a8cf308a808decbea6d7a3f7d6d1f64dfa7a0e0eeb57bf561f422b56fbd05
+        digest: sha256:e04a8cf308a808decbea6d7a3f7d6d1f64dfa7a0e0eeb57bf561f422b56fbd05
+        official: true
+        approximate_size_gb: 6.41
+      capabilities:
+      - freesurfer.core
+      - freesurfer.recon_all
+    licenses:
+    - id: freesurfer
+      required: true
+      env: FS_LICENSE
+      target: /opt/freesurfer/license.txt
+  outputs:
+    root: derivatives/freesurfer
+    environment: FREESURFER_OUT_ROOT
+    scanner: adapter.py:scan_outputs
+    artifact_adapter: adapter.py:discover_artifacts
+  provenance:
+    capture:
+    - resolved_inputs
+    - parameters
+    - runtime_requirements
+    - resource_request
+    - execution_identity
+    portable_spec: true

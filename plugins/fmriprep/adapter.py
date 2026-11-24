@@ -7,8 +7,8 @@ import re
 from pathlib import Path
 from typing import Any, Iterable
 
-from nipa.artifacts.adapters.patterns import discover_pattern_artifacts
-from nipa.artifacts.model import Artifact, resource_for_path
+from nipa3.sdk import discover_pattern_artifacts
+from nipa3.sdk import Artifact, resource_for_path
 
 _FS_ENTITY_RE = re.compile(r"^(sub-[A-Za-z0-9]+)(?:_(ses-[A-Za-z0-9]+))?$")
 

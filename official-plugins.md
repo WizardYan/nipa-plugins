@@ -1,16 +1,12 @@
 # Official NIPA plugin packages
 
-Browse each plugin page for documentation, source files and package downloads.
+Release [v2.3.5](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.5) contains eight packages using the public NIPA SDK boundary and requires **NIPA 3.0.15 or newer**. The catalog retains compatible packages for older installations.
 
-The updated fMRIPrep 1.0.5, MRtrix3 0.3.1 and XCP-D 26.2.3 packages require NIPA 3.0.14 or newer and are available in [release v2.3.4](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.4). The official catalog retains compatible versions for older NIPA installations.
-
-- [CAT12](plugins/cat12.md)
-- [fMRIPrep](plugins/fmriprep.md)
-- [FreeSurfer](plugins/freesurfer.md)
-- [LST-AI (CPU)](plugins/lst_ai.md)
-- [MRtrix3](plugins/mrtrix3.md)
-- [Thalamic Nuclei Segmentation](plugins/thalamic_nuclei.md)
-- [TRACULA](plugins/tracula.md)
-- [XCP-D](plugins/xcp_d.md)
-
-[Create an fMRIPrep plugin in NIPA](README.md#create-an-fmriprep-plugin-in-nipa)
+- [CAT12 1.1.2](plugins/cat12.md)
+- [fMRIPrep 1.0.6](plugins/fmriprep.md)
+- [FreeSurfer 1.1.4](plugins/freesurfer.md)
+- [LST-AI (CPU) 1.0.5](plugins/lst_ai.md)
+- [MRtrix3 0.3.2](plugins/mrtrix3.md)
+- [Thalamic Nuclei Segmentation 1.1.3](plugins/thalamic_nuclei.md)
+- [TRACULA 1.1.4](plugins/tracula.md)
+- [XCP-D 26.2.4](plugins/xcp_d.md)

@@ -4,8 +4,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Iterable
 
-from nipa.artifacts.adapters.patterns import discover_pattern_artifacts
-from nipa.artifacts.model import Artifact
+from nipa3.sdk import discover_pattern_artifacts
+from nipa3.sdk import Artifact
 
 
 def discover_artifacts(*, root: Path, definition: dict[str, Any], scan_payload: dict[str, Any]) -> Iterable[Artifact]:

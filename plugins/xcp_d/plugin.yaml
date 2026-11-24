@@ -2,7 +2,7 @@ schema: nipa.plugin/v3
 plugin:
   id: xcp_d
   name: XCP-D
-  version: 26.2.3
+  version: 26.2.4
   category: functional
   description: Containerized resting-state fMRI post-processing from compatible BIDS preprocessing derivatives.
 scientific_outputs:

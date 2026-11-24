@@ -1,0 +1,333 @@
+schema: nipa.plugin/v3
+plugin:
+  id: tracula
+  name: TRACULA
+  version: 1.1.4
+  category: diffusion
+  description: Diffusion MRI tractography using producer-neutral artifact contracts and a native TRACULA execution adapter.
+transformation:
+  inputs:
+    dwi:
+      type: imaging.mri.diffusion.dwi
+      source: dataset
+      cardinality: one
+      label: Raw diffusion MRI with bval/bvec companions
+    reconstruction:
+      type: imaging.mri.anatomical.reconstruction
+      source: artifact
+      cardinality: one
+      label: FreeSurfer anatomical reconstruction
+      attributes:
+        representation: anatomical_reconstruction
+        method: freesurfer
+    thalamic_nuclei:
+      type: imaging.mri.anatomical.segmentation
+      source: artifact
+      cardinality: one
+      required: false
+      label: Thalamic nuclei segmentation
+      attributes:
+        segmentation_type: structure
+        structure: thalamic_nuclei
+        method: freesurfer
+  outputs:
+    preprocessed_dwi:
+      type: imaging.mri.diffusion.dwi
+      attributes:
+        processing_state: preprocessed
+        stage: prep
+    tensor_maps:
+      type: imaging.mri.diffusion.scalar_map
+      attributes:
+        model: tensor
+        stage: prep
+    diffusion_posterior:
+      type: imaging.mri.diffusion.model
+      attributes:
+        representation: posterior
+        method: bedpostx
+        stage: bedp
+    tract_map:
+      type: imaging.mri.diffusion.tractography
+      attributes:
+        representation: pathway_map
+        method: tracula
+        stage: path
+    table:
+      type: table.statistics
+      attributes:
+        domain: diffusion_tractography
+        representation: pathway
+        stage: path
+    config:
+      type: text
+      attributes:
+        format: native_configuration
+  parameters:
+    susceptibility_correction:
+      type: enum
+      default: none
+      description: B0 susceptibility-distortion correction strategy.
+      values:
+        none: 0
+        fieldmap: 1
+        reverse_polarity: 2
+      native_key: dob0
+    eddy_correction:
+      type: enum
+      default: none
+      description: Eddy-current correction strategy.
+      values:
+        none: 0
+        eddy_correct: 1
+        eddy: 2
+      native_key: doeddy
+    rotate_bvecs:
+      type: boolean
+      default: true
+      native_key: dorotbvecs
+    intra_registration:
+      type: enum
+      default: boundary_based
+      values:
+        correlation_ratio: 1
+        mutual_information: 2
+        boundary_based: 3
+      native_key: intrareg
+    intra_dof:
+      type: integer
+      default: 6
+      minimum: 6
+      maximum: 12
+      native_key: intradof
+    intra_max_rotation_deg:
+      type: integer
+      default: 90
+      minimum: 0
+      maximum: 180
+      native_key: intrarot
+    inter_registration:
+      type: enum
+      default: syn_fa
+      values:
+        affine_t1_correlation_ratio: 1
+        affine_t1_mutual_information: 2
+        robust_t1: 3
+        cvs_t1: 4
+        syn_fa: 5
+      native_key: interreg
+    segmentation:
+      type: string
+      default: aparc+aseg
+      native_key: segname
+    use_thalamic_nuclei:
+      type: boolean
+      default: true
+      native_key: usethalnuc
+    use_anatomical_mask:
+      type: boolean
+      default: true
+      native_key: usemaskanat
+    n_sticks:
+      type: integer
+      default: 2
+      minimum: 1
+      maximum: 3
+      native_key: nstick
+    burn_in_iterations:
+      type: integer
+      default: 200
+      minimum: 0
+      native_key: nburnin
+    sample_iterations:
+      type: integer
+      default: 7500
+      minimum: 1
+      native_key: nsample
+    keep_every:
+      type: integer
+      default: 5
+      minimum: 1
+      native_key: nkeep
+    reinitialize_paths:
+      type: boolean
+      default: false
+      native_key: reinit
+  capability:
+    title: White-matter tractography
+    goal: Reconstruct major white-matter pathways from diffusion MRI
+    abstraction: artifact-to-native-adapter
+    native_engine: trac-all
+implementation:
+  entrypoint: run.sh
+  enabled: true
+  resources:
+    cpus: 8
+    memory_gb: 40
+    time: 7-00:00:00
+    gpu_count: 0
+    scratch_gb: 40
+  runtime:
+    requirements:
+    - id: freesurfer-7.3.2
+      kind: container
+      version: 7.3.2
+      acquisition: managed
+      binding_env: FREESURFER_SIF
+      discovery:
+        filename_patterns:
+        - '*freesurfer*7.3.2*.sif'
+        - '*freesurfer*.sif'
+      runtimes:
+      - singularity
+      - apptainer
+      sources:
+      - uri: docker://freesurfer/freesurfer@sha256:e04a8cf308a808decbea6d7a3f7d6d1f64dfa7a0e0eeb57bf561f422b56fbd05
+        digest: sha256:e04a8cf308a808decbea6d7a3f7d6d1f64dfa7a0e0eeb57bf561f422b56fbd05
+        official: true
+        approximate_size_gb: 6.41
+      capabilities:
+      - freesurfer.core
+      - freesurfer.tracula
+      - freesurfer.recon_all
+    - id: fsl
+      kind: software
+      acquisition: site_provided
+      binding_env: FSLDIR
+      capabilities:
+      - fsl.core
+      - fsl.bedpostx
+      - fsl.probtrackx
+      commands:
+      - fslmaths
+      - bedpostx
+      - probtrackx2
+      environment:
+        FSLDIR: '{root}'
+        FSLOUTPUTTYPE: NIFTI_GZ
+    - id: ants
+      kind: conda
+      acquisition: site_provided
+      binding_env: ANTS_ENV
+      capabilities:
+      - ants.registration
+      commands:
+      - antsRegistration
+      - antsApplyTransforms
+      environment:
+        ANTSPATH: '{prefix}/bin/'
+    licenses:
+    - id: freesurfer
+      required: true
+      env: FS_LICENSE
+      target: /opt/freesurfer/license.txt
+  outputs:
+    root: derivatives/tracula
+    environment: TRACULA_OUT_ROOT
+    formats:
+    - id: tensor_maps
+      label: Diffusion tensor map
+      group: Tensor maps
+      patterns:
+      - '*dtifit_*.nii'
+      - '*dtifit_*.nii.gz'
+    - id: tract_map
+      label: Tract probability / pathway map
+      group: Tractography
+      patterns:
+      - '*path*.nii'
+      - '*path*.nii.gz'
+      - '*tract*.nii'
+      - '*tract*.nii.gz'
+      - '*posterior*.nii'
+      - '*posterior*.nii.gz'
+    - id: nifti
+      label: TRACULA NIfTI derivative
+      group: Images
+      patterns:
+      - '*.nii'
+      - '*.nii.gz'
+    - id: freesurfer_volume
+      label: FreeSurfer volume
+      group: FreeSurfer
+      patterns:
+      - '*.mgz'
+      - '*.mgh'
+    - id: table
+      label: Statistics / table
+      group: Tables
+      patterns:
+      - '*.csv'
+      - '*.tsv'
+      - '*.stats'
+    - id: config
+      label: Configuration / text
+      group: Configuration
+      patterns:
+      - '*.txt'
+      - '*.log'
+      - '*.out'
+      - '*.err'
+      - '*.conf'
+      - '*.cfg'
+    exclude:
+    - logs/**
+    - '**/logs/**'
+    - .nipa_complete/**
+    - '**/.nipa_complete/**'
+  assets:
+    TRACULA_EXEC:
+      path: tracula_exec.sh
+      executable: true
+    TRACULA_CHECK_FS:
+      path: tracula_check_freesurfer_outputs.sh
+      executable: true
+    TRACULA_AUTO_CONFIG:
+      path: tracula_auto_configuration.sh
+      executable: true
+    TRACULA_VALIDATE_CONFIG:
+      path: tracula_validate_configuration.sh
+      executable: true
+  stages:
+  - id: prep
+    label: Diffusion preprocessing and registration
+    native_command: trac-all -prep
+    requires:
+    - imaging.mri.diffusion.dwi
+    - imaging.mri.anatomical.reconstruction
+    produces:
+    - imaging.mri.diffusion.dwi
+    - imaging.mri.diffusion.scalar_map
+  - id: bedp
+    label: BedpostX diffusion-model estimation
+    native_command: trac-all -bedp
+    depends_on:
+    - prep
+    requires:
+    - imaging.mri.diffusion.dwi
+    produces:
+    - imaging.mri.diffusion.model
+  - id: path
+    label: Probabilistic pathway reconstruction
+    native_command: trac-all -path
+    depends_on:
+    - bedp
+    requires:
+    - imaging.mri.diffusion.model
+    produces:
+    - imaging.mri.diffusion.tractography
+    - table.statistics
+  provenance:
+    native_engine: trac-all
+    capture:
+    - resolved_inputs
+    - parameters
+    - runtime_requirements
+    - resource_request
+    - execution_identity
+    - stage_sequence
+    portable_spec: true
+  script_env: TRACULA_SBATCH_SCRIPT
+ui:
+  modalities:
+  - dwi

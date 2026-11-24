@@ -1,0 +1,134 @@
+schema: nipa.plugin/v3
+plugin:
+  id: lst_ai
+  name: LST-AI (CPU)
+  version: 1.0.5
+  category: structural
+  description: CPU-only multiple-sclerosis lesion segmentation from paired T1w and FLAIR MRI.
+  repository: https://github.com/CompImg/LST-AI
+transformation:
+  inputs:
+    t1w:
+      type: imaging.mri.anatomical.image
+      source: dataset
+      cardinality: one
+      attributes:
+        contrast: T1w
+    flair:
+      type: imaging.mri.anatomical.image
+      source: dataset
+      cardinality: one
+      attributes:
+        contrast: FLAIR
+  outputs:
+    lesion_mask:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: lesion
+        method: lst_ai
+        representation: binary_mask
+    lesion_probability:
+      type: imaging.mri.anatomical.image
+      required: false
+      attributes:
+        contrast: lesion_probability
+        method: lst_ai
+    lesion_annotation:
+      type: imaging.mri.anatomical.segmentation
+      required: false
+      attributes:
+        segmentation_type: lesion
+        method: lst_ai
+        representation: anatomical_annotation
+    metadata:
+      type: metadata
+      required: false
+      attributes:
+        scope: lesion_segmentation
+        method: lst_ai
+  parameters:
+    mode:
+      type: enum
+      default: segmentation_and_annotation
+      values:
+        segmentation_and_annotation: segmentation_and_annotation
+        segmentation_only: segmentation_only
+    threshold:
+      type: number
+      default: 0.5
+      minimum: 0.0
+      maximum: 1.0
+    lesion_threshold_mm3:
+      type: integer
+      default: 0
+      minimum: 0.0
+    stripped:
+      type: boolean
+      default: false
+    fast_mode:
+      type: boolean
+      default: false
+    probability_map:
+      type: boolean
+      default: false
+  capability:
+    title: MS lesion segmentation
+    goal: Segment lesions in paired T1w and FLAIR images using LST-AI on CPU
+implementation:
+  entrypoint: run.sh
+  enabled: true
+  resources:
+    cpus: 8
+    memory_gb: 32
+    time: '24:00:00'
+    gpu_count: 0
+    scratch_gb: 64
+  runtime:
+    requirements:
+    - id: lst-ai-2.0.0rc1-cpu
+      kind: container
+      version: 2.0.0rc1-cpu
+      acquisition: managed
+      binding_env: LST_AI_SIF
+      discovery:
+        filename_patterns:
+        - '*lst*ai*2.0.0rc1*cpu*.sif'
+        - '*lst*ai*cpu*.sif'
+      runtimes:
+      - singularity
+      sources:
+      - uri: docker://jqmcginnis/lst-ai@sha256:c985aa48255feda6b29d1460c2227ef620c3b56fb51ec50ffafa5a95994cdd97
+        digest: sha256:c985aa48255feda6b29d1460c2227ef620c3b56fb51ec50ffafa5a95994cdd97
+        official: true
+        approximate_size_gb: 1.0
+  outputs:
+    root: derivatives/lst_ai
+    environment: LST_AI_OUT_ROOT
+    formats:
+    - id: lesion_mask
+      label: LST-AI NIfTI output
+      group: Lesion outputs
+      patterns:
+      - '*.nii'
+      - '*.nii.gz'
+    - id: metadata
+      label: LST-AI metadata
+      group: Metadata
+      patterns:
+      - '*.json'
+      - '*.tsv'
+      - '*.csv'
+    artifact_adapter: adapter.py:discover_artifacts
+ui:
+  modalities:
+  - anat
+upstream:
+- name: LST-AI
+  version: 2.0.0rc1
+  runtime_requirement: lst-ai-2.0.0rc1-cpu
+  homepage: https://github.com/CompImg/LST-AI
+  repository: https://github.com/CompImg/LST-AI
+  license: MIT
+  redistribution:
+    mode: reference_only
+    permitted: false

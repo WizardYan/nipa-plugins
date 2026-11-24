@@ -2,7 +2,7 @@ schema: nipa.plugin/v3
 plugin:
   id: fmriprep
   name: fMRIPrep
-  version: 1.0.5
+  version: 1.0.6
   category: functional
   description: BIDS-native preprocessing for resting-state and task functional MRI.
 transformation:

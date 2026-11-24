@@ -1,104 +1,176 @@
 {
-  "schema": "nipa.official-catalog/v1",
   "plugins": [
     {
       "id": "cat12",
+      "min_nipa_version": "3.0.0",
       "name": "CAT12",
-      "version": "1.1.1",
-      "sha256": "86e5d7eabe610e9b0bf7a6e7e8e32eaf5e3fa34f0eff12ae3e95c756eed35449",
-      "runtime_version": "brainprep-anat-v1",
       "release_tag": "v2.3.2",
-      "min_nipa_version": "3.0.0"
+      "runtime_version": "brainprep-anat-v1",
+      "sha256": "86e5d7eabe610e9b0bf7a6e7e8e32eaf5e3fa34f0eff12ae3e95c756eed35449",
+      "version": "1.1.1"
     },
     {
       "id": "fmriprep",
+      "min_nipa_version": "3.0.0",
       "name": "fMRIPrep",
-      "version": "1.0.4",
-      "sha256": "a5aaf1ad1d4fa4432fe9524033e567d652867d1c67bae617d4810cf092712c98",
-      "runtime_version": "25.2.4",
       "release_tag": "fmriprep-v1.0.4",
-      "min_nipa_version": "3.0.0"
+      "runtime_version": "25.2.4",
+      "sha256": "a5aaf1ad1d4fa4432fe9524033e567d652867d1c67bae617d4810cf092712c98",
+      "version": "1.0.4"
+    },
+    {
+      "id": "fmriprep",
+      "min_nipa_version": "3.0.14",
+      "name": "fMRIPrep",
+      "release_tag": "v2.3.4",
+      "runtime_version": "25.2.4",
+      "sha256": "1c1dcb4cc7bcd79a9fad9a1cce7f78dbe778af613cc5b8840128ab0729a59220",
+      "version": "1.0.5"
     },
     {
       "id": "freesurfer",
+      "min_nipa_version": "3.0.7",
       "name": "FreeSurfer",
-      "version": "1.1.3",
-      "sha256": "dca20e6952cc81e7a5ffa58bdaf7c74309332c0307a9267d3100a41e1d3a8b1e",
-      "runtime_version": "7.3.2",
       "release_tag": "v2.3.3",
-      "min_nipa_version": "3.0.7"
+      "runtime_version": "7.3.2",
+      "sha256": "dca20e6952cc81e7a5ffa58bdaf7c74309332c0307a9267d3100a41e1d3a8b1e",
+      "version": "1.1.3"
     },
     {
       "id": "lst_ai",
+      "min_nipa_version": "3.0.7",
       "name": "LST-AI (CPU)",
-      "version": "1.0.4",
-      "sha256": "e60111dc241793e7aaeb9c9dfb7674143c5f41b086fc34404190f0b0ce1a221f",
-      "runtime_version": "2.0.0rc1-cpu",
       "release_tag": "v2.3.3",
-      "min_nipa_version": "3.0.7"
+      "runtime_version": "2.0.0rc1-cpu",
+      "sha256": "e60111dc241793e7aaeb9c9dfb7674143c5f41b086fc34404190f0b0ce1a221f",
+      "version": "1.0.4"
     },
     {
       "id": "mrtrix3",
+      "min_nipa_version": "3.0.12",
       "name": "MRtrix3",
-      "version": "0.3.0",
-      "sha256": "e7a94c0e28c0408ad65e8c87d2c7313034164c9d8353b4e60adb058144a185dc",
-      "runtime_version": "3.0.8",
       "release_tag": "mrtrix3-v0.3.0",
-      "min_nipa_version": "3.0.12"
+      "runtime_version": "3.0.8",
+      "sha256": "e7a94c0e28c0408ad65e8c87d2c7313034164c9d8353b4e60adb058144a185dc",
+      "version": "0.3.0"
+    },
+    {
+      "id": "mrtrix3",
+      "min_nipa_version": "3.0.14",
+      "name": "MRtrix3",
+      "release_tag": "v2.3.4",
+      "runtime_version": "3.0.8",
+      "sha256": "3c93e2f20b80e52b2fff6e4ef8f004dba242072f49263bb924a33ad7bf989920",
+      "version": "0.3.1"
     },
     {
       "id": "thalamic_nuclei",
+      "min_nipa_version": "3.0.0",
       "name": "Thalamic Nuclei Segmentation",
-      "version": "1.1.2",
-      "sha256": "e5c117308d75d82468562b1826d5f6225303e94b57e2ef46dde6e24af1b41771",
-      "runtime_version": "7.3.2",
       "release_tag": "v2.3.2",
-      "min_nipa_version": "3.0.0"
+      "runtime_version": "7.3.2",
+      "sha256": "e5c117308d75d82468562b1826d5f6225303e94b57e2ef46dde6e24af1b41771",
+      "version": "1.1.2"
     },
     {
       "id": "tracula",
+      "min_nipa_version": "3.0.7",
       "name": "TRACULA",
-      "version": "1.1.3",
-      "sha256": "93ab9f56f089834de937495f511675e6764105d28512de0175fd572d2ba90cc1",
-      "runtime_version": "7.3.2",
       "release_tag": "v2.3.3",
-      "min_nipa_version": "3.0.7"
+      "runtime_version": "7.3.2",
+      "sha256": "93ab9f56f089834de937495f511675e6764105d28512de0175fd572d2ba90cc1",
+      "version": "1.1.3"
     },
     {
       "id": "xcp_d",
+      "min_nipa_version": "3.0.7",
       "name": "XCP-D",
-      "version": "26.2.2",
-      "sha256": "07585ca9f8f21142eb0e52e4d280ef7f84aef7f97630a6d0120ebe045d7ec086",
-      "runtime_version": "26.2.0",
       "release_tag": "v2.3.3",
-      "min_nipa_version": "3.0.7"
+      "runtime_version": "26.2.0",
+      "sha256": "07585ca9f8f21142eb0e52e4d280ef7f84aef7f97630a6d0120ebe045d7ec086",
+      "version": "26.2.2"
+    },
+    {
+      "id": "xcp_d",
+      "min_nipa_version": "3.0.14",
+      "name": "XCP-D",
+      "release_tag": "v2.3.4",
+      "runtime_version": "26.2.0",
+      "sha256": "2b56e274f0054969cf79d8efc101da8293c22b94da26d7b8e7c58e4e3d9eda02",
+      "version": "26.2.3"
+    },
+    {
+      "id": "cat12",
+      "min_nipa_version": "3.0.15",
+      "name": "CAT12",
+      "release_tag": "v2.3.5",
+      "runtime_version": "brainprep-anat-v1",
+      "sha256": "cf2848518f5427606a513f9fcf91b6c188cc1027fc2fbf21fa4675912a7bf3c0",
+      "version": "1.1.2"
     },
     {
       "id": "fmriprep",
+      "min_nipa_version": "3.0.15",
       "name": "fMRIPrep",
-      "version": "1.0.5",
-      "sha256": "1c1dcb4cc7bcd79a9fad9a1cce7f78dbe778af613cc5b8840128ab0729a59220",
+      "release_tag": "v2.3.5",
       "runtime_version": "25.2.4",
-      "release_tag": "v2.3.4",
-      "min_nipa_version": "3.0.14"
+      "sha256": "66609fcf2020a07b62a12efccb6e1ee88fbbbb10eeda16da0055bcc6b352d839",
+      "version": "1.0.6"
+    },
+    {
+      "id": "freesurfer",
+      "min_nipa_version": "3.0.15",
+      "name": "FreeSurfer",
+      "release_tag": "v2.3.5",
+      "runtime_version": "7.3.2",
+      "sha256": "bae8cf67d8826dc2451b3d27497d669349c67f2a4092573b8bdef2277e42c4f0",
+      "version": "1.1.4"
+    },
+    {
+      "id": "lst_ai",
+      "min_nipa_version": "3.0.15",
+      "name": "LST-AI (CPU)",
+      "release_tag": "v2.3.5",
+      "runtime_version": "2.0.0rc1-cpu",
+      "sha256": "af487f41899e5866394b180d41fa31975b81e5d73ed7880c52039531f353380a",
+      "version": "1.0.5"
     },
     {
       "id": "mrtrix3",
+      "min_nipa_version": "3.0.15",
       "name": "MRtrix3",
-      "version": "0.3.1",
-      "sha256": "3c93e2f20b80e52b2fff6e4ef8f004dba242072f49263bb924a33ad7bf989920",
+      "release_tag": "v2.3.5",
       "runtime_version": "3.0.8",
-      "release_tag": "v2.3.4",
-      "min_nipa_version": "3.0.14"
+      "sha256": "1272e0b9abc16efd2d0f36066c957f603cc17c7bc889ddefe78061efad6fd2fd",
+      "version": "0.3.2"
+    },
+    {
+      "id": "thalamic_nuclei",
+      "min_nipa_version": "3.0.15",
+      "name": "Thalamic Nuclei Segmentation",
+      "release_tag": "v2.3.5",
+      "runtime_version": "7.3.2",
+      "sha256": "b23da22413ffdaece70cce5f6544884d4a8a5e87221c47a079455647106fb628",
+      "version": "1.1.3"
+    },
+    {
+      "id": "tracula",
+      "min_nipa_version": "3.0.15",
+      "name": "TRACULA",
+      "release_tag": "v2.3.5",
+      "runtime_version": "7.3.2",
+      "sha256": "82d6627903aeb441ce9178e347d01d2fd7d494b8e0da9314a2e1dca848cc60e9",
+      "version": "1.1.4"
     },
     {
       "id": "xcp_d",
+      "min_nipa_version": "3.0.15",
       "name": "XCP-D",
-      "version": "26.2.3",
-      "sha256": "2b56e274f0054969cf79d8efc101da8293c22b94da26d7b8e7c58e4e3d9eda02",
+      "release_tag": "v2.3.5",
       "runtime_version": "26.2.0",
-      "release_tag": "v2.3.4",
-      "min_nipa_version": "3.0.14"
+      "sha256": "d3abd03cb337a71de289ecad26c8aefd7ad2f100a0ec264085457aa664a7373a",
+      "version": "26.2.4"
     }
-  ]
+  ],
+  "schema": "nipa.official-catalog/v1"
 }

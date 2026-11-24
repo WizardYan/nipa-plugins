@@ -1,17 +1,16 @@
 # fMRIPrep
 
-Plugin version **1.0.5** · Runtime **25.2.4** · Requires **NIPA 3.0.14 or newer**
+Plugin version **1.0.6** · Runtime **25.2.4** · Requires **NIPA 3.0.15 or newer**
 
-BIDS-native preprocessing for resting-state and task functional MRI.
+The manifest declares inputs, outputs, parameter rules and runtime requirements. Python adapters use the public NIPA plugin SDK and run in an isolated adapter worker.
 
-Parameter controls and dependency rules are declared in `plugin.yaml`.
+[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.5/fmriprep-1.0.6.nipa-plugin.tar.gz)
 
-[Download package](https://github.com/WizardYan/nipa-plugins/releases/download/v2.3.4/fmriprep-1.0.5.nipa-plugin.tar.gz)
-
-SHA-256 `1c1dcb4cc7bcd79a9fad9a1cce7f78dbe778af613cc5b8840128ab0729a59220`
+SHA-256 `66609fcf2020a07b62a12efccb6e1ee88fbbbb10eeda16da0055bcc6b352d839`
 
 ## Documentation and package files
 
+- [PLUGIN-BOUNDARY.md](fmriprep/PLUGIN-BOUNDARY.md)
 - [adapter.py](fmriprep/adapter.py)
 - [cli.py](fmriprep/cli.py)
 - [plugin.yaml](fmriprep/plugin.yaml)

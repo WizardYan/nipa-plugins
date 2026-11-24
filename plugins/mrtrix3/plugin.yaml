@@ -2,7 +2,7 @@ schema: nipa.plugin/v3
 plugin:
   id: mrtrix3
   name: MRtrix3
-  version: 0.3.1
+  version: 0.3.2
   category: Diffusion MRI
   description: Fit a diffusion tensor and derive FA, MD, AD, and RD maps from a diffusion MRI scan.
 upstream:

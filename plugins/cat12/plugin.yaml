@@ -1,0 +1,198 @@
+schema: nipa.plugin/v3
+plugin:
+  id: cat12
+  name: CAT12
+  version: 1.1.2
+  category: structural
+  description: T1w tissue segmentation, morphometry, and image-quality reporting.
+transformation:
+  inputs:
+    t1w:
+      type: imaging.mri.anatomical.image
+      attributes:
+        contrast: T1w
+      source: dataset
+      cardinality: one
+  outputs:
+    smoothed_modulated_gm:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: tissue
+        tissue: gray_matter
+        method: cat12
+        normalized: true
+        modulated: true
+        smoothed: true
+    smoothed_modulated_wm:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: tissue
+        tissue: white_matter
+        method: cat12
+        normalized: true
+        modulated: true
+        smoothed: true
+    modulated_gm:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: tissue
+        tissue: gray_matter
+        method: cat12
+        normalized: true
+        modulated: true
+    modulated_wm:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: tissue
+        tissue: white_matter
+        method: cat12
+        normalized: true
+        modulated: true
+    normalized_tissue:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: tissue
+        method: cat12
+        space: normalized
+        normalized: true
+    native_tissue:
+      type: imaging.mri.anatomical.segmentation
+      attributes:
+        segmentation_type: tissue
+        method: cat12
+        space: native
+    deformation:
+      type: transform
+      attributes:
+        method: cat12
+    qc_report:
+      type: qc
+      attributes:
+        scope: anatomical_mri
+        method: cat12
+    html_report:
+      type: report
+      attributes:
+        report_type: morphometry
+        format: html
+        method: cat12
+    table:
+      type: table.feature
+      attributes:
+        domain: morphometry
+        method: cat12
+  capability:
+    title: Brain morphometry
+    goal: Segment tissue and measure gray/white matter morphology
+implementation:
+  entrypoint: run.sh
+  enabled: true
+  resources:
+    cpus: 8
+    memory_gb: 32
+    time: '12:00:00'
+    gpu_count: 0
+    scratch_gb: 32
+  runtime:
+    requirements:
+    - id: cat12-brainprep-v1
+      kind: container
+      version: brainprep-anat-v1
+      acquisition: managed
+      binding_env: CAT12_SIF
+      discovery:
+        filename_patterns:
+        - '*brainprep-anat*v1*.sif'
+        - '*brainprep*anat*.sif'
+        - '*cat12*.sif'
+      runtimes:
+      - apptainer
+      - singularity
+      sources:
+      - uri: docker://neurospin/brainprep-anat@sha256:f999dfb4f6fa0c043a2f624314c5598765d2cb1e5ecc86c2874cfa53a44cd88d
+        digest: sha256:f999dfb4f6fa0c043a2f624314c5598765d2cb1e5ecc86c2874cfa53a44cd88d
+        official: true
+        approximate_size_gb: 15.72
+  outputs:
+    root: derivatives/cat12
+    scanner: adapter.py:scan_outputs
+    environment: CAT12_OUT_ROOT
+    formats:
+    - id: smoothed_modulated_gm
+      label: Smoothed modulated gray matter
+      group: VBM
+      patterns:
+      - smwp1*.nii
+      - smwp1*.nii.gz
+    - id: smoothed_modulated_wm
+      label: Smoothed modulated white matter
+      group: VBM
+      patterns:
+      - smwp2*.nii
+      - smwp2*.nii.gz
+    - id: modulated_gm
+      label: Modulated gray matter
+      group: VBM
+      patterns:
+      - mwp1*.nii
+      - mwp1*.nii.gz
+    - id: modulated_wm
+      label: Modulated white matter
+      group: VBM
+      patterns:
+      - mwp2*.nii
+      - mwp2*.nii.gz
+    - id: normalized_tissue
+      label: Normalized tissue map
+      group: Segmentation
+      patterns:
+      - wp[123]*.nii
+      - wp[123]*.nii.gz
+    - id: native_tissue
+      label: Native tissue segmentation
+      group: Segmentation
+      patterns:
+      - p[123]*.nii
+      - p[123]*.nii.gz
+    - id: deformation
+      label: Deformation field
+      group: Deformation
+      patterns:
+      - y_*.nii
+      - y_*.nii.gz
+      - iy_*.nii
+      - iy_*.nii.gz
+      - wj_*.nii
+      - wj_*.nii.gz
+    - id: nifti
+      label: CAT12 NIfTI derivative
+      group: Other images
+      patterns:
+      - '*.nii'
+      - '*.nii.gz'
+    - id: qc_report
+      label: CAT12 quality report
+      group: Reports
+      patterns:
+      - cat_*.xml
+      - '*report*.xml'
+      role: report
+    - id: html_report
+      label: CAT12 HTML report
+      group: Reports
+      patterns:
+      - '*.html'
+      - '*.htm'
+      role: report
+    - id: table
+      label: CAT12 table
+      group: Tables
+      patterns:
+      - '*.csv'
+      - '*.tsv'
+    exclude:
+    - .nipa_complete/**
+    - '**/.nipa_complete/**'
+ui:
+  modalities:
+  - anat
