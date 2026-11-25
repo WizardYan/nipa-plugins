@@ -179,6 +179,15 @@
       "runtime_version": "2.1",
       "sha256": "01fc0c75323d9b0ae56b408e54be7ca8872a174602fa64f01e02c25190d601c5",
       "version": "0.1.0"
+    },
+    {
+      "id": "brainager",
+      "min_nipa_version": "3.0.15",
+      "name": "brainageR",
+      "release_tag": "brainager-v0.1.1",
+      "runtime_version": "2.1",
+      "sha256": "920b28e207654a5dd547bc7439b1d36551244f1fff67f043baddc26f703e66fc",
+      "version": "0.1.1"
     }
   ],
   "schema": "nipa.official-catalog/v1"
