@@ -1,0 +1,93 @@
+schema: nipa.plugin/v3
+plugin:
+  id: brainager
+  name: brainageR
+  version: 0.1.0
+  category: structural
+  description: Predict brain age and its confidence interval from a raw T1-weighted MRI using brainageR 2.1.
+  repository: https://github.com/james-cole/brainageR
+  authors:
+  - NIPA contributors
+transformation:
+  capability:
+    title: Brain age prediction
+    goal: Estimate brain age from raw T1-weighted MRI
+  inputs:
+    t1w:
+      type: imaging.mri.anatomical.image
+      source: artifact
+      cardinality: one
+      label: Raw T1-weighted MRI
+      description: Select one raw, unsegmented T1w image. Do not supply a skull-stripped or preprocessed derivative.
+      attributes:
+        contrast: T1w
+  outputs:
+    brain_age:
+      type: table.feature
+      label: Brain age prediction
+      attributes:
+        method: brainager
+        feature_domain: brain_age
+        unit: years
+      files:
+        patterns: ['**/*_desc-brainageR_prediction.csv']
+        label: Brain age and confidence interval
+    qc_report:
+      type: report
+      label: Segmentation QC report
+      required: false
+      attributes:
+        method: brainager
+        report_type: quality_control
+        format: HTML
+      files:
+        patterns: ['**/qc/index.html']
+        label: brainageR segmentation QC
+  parameters:
+    chronological_age:
+      type: number
+      required: false
+      minimum: 0
+      maximum: 120
+      label: Chronological age (optional)
+      unit: years
+      description: Used only to report brain-PAD = predicted age minus chronological age. Not an input to the prediction model. For mixed-age batches leave blank and join ages downstream.
+    keep_intermediates:
+      type: boolean
+      default: false
+      label: Keep segmentation intermediates
+      description: Retain SPM tissue maps and transformation files with this attempt's outputs.
+implementation:
+  entrypoint: run.py
+  enabled: true
+  resources:
+    cpus: 4
+    memory_gb: 16
+    time: '04:00:00'
+    gpu_count: 0
+    scratch_gb: 16
+  runtime:
+    requirements:
+    - id: brainager-2.1
+      kind: container
+      version: '2.1'
+      acquisition: site_provided
+      binding_env: BRAINAGER_SIF
+      runtimes: [singularity, apptainer]
+      discovery:
+        filename_patterns: ['*brainageR*2.1*.sif', '*brainager*2.1*.sif']
+      capabilities: [brainager.predict]
+  outputs:
+    root: derivatives/brainager
+  provenance:
+    capture: [resolved_inputs, parameters, runtime_requirements, resource_request, execution_identity]
+    portable_spec: true
+upstream:
+- name: brainageR
+  version: '2.1'
+  runtime_requirement: brainager-2.1
+  homepage: https://github.com/james-cole/brainageR
+  license: LGPL-3.0
+  redistribution:
+    mode: site_provided
+    permitted: false
