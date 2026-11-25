@@ -188,6 +188,15 @@
       "runtime_version": "2.1",
       "sha256": "920b28e207654a5dd547bc7439b1d36551244f1fff67f043baddc26f703e66fc",
       "version": "0.1.1"
+    },
+    {
+      "id": "pyment",
+      "min_nipa_version": "3.0.15",
+      "name": "pyment",
+      "release_tag": "pyment-v0.1.0",
+      "runtime_version": "5.1.0",
+      "sha256": "cdcb4263dad0f32970cb164a289ba92a7cc6f15c57f23c56550a7c0e73f247b4",
+      "version": "0.1.0"
     }
   ],
   "schema": "nipa.official-catalog/v1"
