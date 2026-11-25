@@ -12,3 +12,5 @@ Release [v2.3.5](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.5) 
 - [XCP-D 26.2.4](plugins/xcp_d.md)
 
 - [brainageR 0.1.1](plugins/brainager.md) — [separate release](https://github.com/WizardYan/nipa-plugins/releases/tag/brainager-v0.1.1); requires NIPA 3.0.15+, one-click managed SIF conversion; real build/MRI acceptance pending.
+
+- [pyment 0.1.0](plugins/pyment.md) — [separate release](https://github.com/WizardYan/nipa-plugins/releases/tag/pyment-v0.1.0); NIPA 3.0.15+, two models, managed SIF build and FreeSurfer license setup; real build/MRI acceptance pending.

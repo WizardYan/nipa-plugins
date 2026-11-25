@@ -1,0 +1,99 @@
+schema: nipa.plugin/v3
+plugin:
+  id: pyment
+  name: pyment
+  version: 0.1.0
+  category: structural
+  description: Raw T1w to brain age using FastSurfer preprocessing and pyment 5.1.0, with a CPU execution path.
+  repository: https://github.com/estenhl/pyment-public
+  authors: [NIPA contributors]
+transformation:
+  capability:
+    title: Brain age prediction with pyment
+    goal: Preprocess a raw T1w image and predict brain age with a selected pyment model
+  inputs:
+    t1w:
+      type: imaging.mri.anatomical.image
+      source: artifact
+      cardinality: one
+      label: Raw T1-weighted MRI
+      description: One unprocessed T1w image; do not substitute a skull-stripped or already-normalized derivative.
+      attributes: {contrast: T1w}
+  outputs:
+    brain_age:
+      type: table.feature
+      label: pyment brain age prediction
+      attributes: {method: pyment, feature_domain: brain_age, unit: years}
+      files:
+        patterns: ['**/brainage_desc-pyment_prediction.csv']
+        label: pyment brain age and model identity
+    preprocessed_t1w:
+      type: imaging.mri.anatomical.image
+      label: pyment model input crop
+      required: false
+      when: {keep_preprocessing: true}
+      attributes: {contrast: T1w, processing_state: preprocessed, method: pyment_fastsurfer}
+      files:
+        patterns: ['**/preprocessed/sub-input_T1w/mri/crop.mgz']
+        label: FastSurfer-conformed model input crop
+  parameters:
+    model:
+      type: enum
+      default: multi-2025
+      values: {multi-2025: multi-2025, reg-2025: reg-2025}
+      option_labels:
+        multi-2025: Multi-task model (multi-2025)
+        reg-2025: Age regression model (reg-2025)
+      label: Prediction model
+      description: Selects the matching architecture and bundled weights. The primary Artifact reports age only; native multi-task outputs remain available as a file.
+    chronological_age:
+      type: number
+      required: false
+      minimum: 0
+      maximum: 120
+      unit: years
+      label: Chronological age (optional)
+      description: Only used for brain-PAD. Leave blank for mixed-age batches and join ages downstream.
+    keep_preprocessing:
+      type: boolean
+      default: true
+      label: Keep FastSurfer preprocessing
+      description: Retain the preprocessing folder and register the model input crop when available.
+implementation:
+  entrypoint: run.py
+  enabled: true
+  resources: {cpus: 4, memory_gb: 16, time: '04:00:00', gpu_count: 0, scratch_gb: 32}
+  runtime:
+    requirements:
+    - id: pyment-5.1.0
+      kind: container
+      version: 5.1.0
+      acquisition: managed
+      binding_env: PYMENT_SIF
+      runtimes: [singularity, apptainer]
+      discovery:
+        filename_patterns: ['*pyment*5.1.0*.sif']
+      sources:
+      - uri: docker://estenhl/pyment-preprocess-and-predict@sha256:005375770551e2d120a092293267058b4aca1373bbdcb59ae44a2c615cc3bad7
+        digest: sha256:005375770551e2d120a092293267058b4aca1373bbdcb59ae44a2c615cc3bad7
+        approximate_size_gb: 7.875
+        official: true
+      capabilities: [pyment.preprocess, pyment.predict]
+    licenses:
+    - id: freesurfer
+      required: true
+      env: FS_LICENSE
+      target: /licenses/freesurfer.txt
+      description: A valid FreeSurfer license file is required by the FastSurfer preprocessing stage.
+  outputs:
+    root: derivatives/pyment
+  provenance:
+    capture: [resolved_inputs, parameters, runtime_requirements, resource_request, execution_identity]
+    portable_spec: true
+upstream:
+- name: pyment
+  version: 5.1.0
+  runtime_requirement: pyment-5.1.0
+  homepage: https://github.com/estenhl/pyment-public
+  license: CC-BY-NC-4.0
+  redistribution: {mode: reference_only, permitted: false}
