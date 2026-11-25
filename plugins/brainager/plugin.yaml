@@ -2,7 +2,7 @@ schema: nipa.plugin/v3
 plugin:
   id: brainager
   name: brainageR
-  version: 0.1.0
+  version: 0.1.1
   category: structural
   description: Predict brain age and its confidence interval from a raw T1-weighted MRI using brainageR 2.1.
   repository: https://github.com/james-cole/brainageR
@@ -71,9 +71,14 @@ implementation:
     - id: brainager-2.1
       kind: container
       version: '2.1'
-      acquisition: site_provided
+      acquisition: managed
       binding_env: BRAINAGER_SIF
       runtimes: [singularity, apptainer]
+      sources:
+      - uri: docker://atlasli/brainage@sha256:25d7ca8d699dc83cbc578467864488f162c46322c1de85b1a4efcdf99542947b
+        digest: sha256:25d7ca8d699dc83cbc578467864488f162c46322c1de85b1a4efcdf99542947b
+        official: false
+        approximate_size_gb: 3.425
       discovery:
         filename_patterns: ['*brainageR*2.1*.sif', '*brainager*2.1*.sif']
       capabilities: [brainager.predict]
@@ -89,5 +94,5 @@ upstream:
   homepage: https://github.com/james-cole/brainageR
   license: LGPL-3.0
   redistribution:
-    mode: site_provided
+    mode: reference_only
     permitted: false

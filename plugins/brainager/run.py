@@ -124,7 +124,7 @@ exec bash "$base/brainageR" "$@"
                     if path.is_file() and path != staged and path.suffix in {'.nii', '.gz', '.mat', '.txt'}:
                         shutil.copy2(path, retained / path.name)
             (publish / 'execution.json').write_text(json.dumps({
-                'tool': 'brainageR', 'tool_version': '2.1', 'plugin_version': '0.1.0',
+                'tool': 'brainageR', 'tool_version': '2.1', 'plugin_version': '0.1.1',
                 'execution_id': os.environ.get('NIPA_EXECUTION_ID'), 'attempt_id': attempt,
                 'input_artifact_id': os.environ.get('NIPA_INPUT_T1W_ARTIFACT_ID'),
                 'parameters': {'chronological_age': age, 'keep_intermediates': keep},

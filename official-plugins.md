@@ -11,4 +11,4 @@ Release [v2.3.5](https://github.com/WizardYan/nipa-plugins/releases/tag/v2.3.5) 
 - [TRACULA 1.1.4](plugins/tracula.md)
 - [XCP-D 26.2.4](plugins/xcp_d.md)
 
-- [brainageR 0.1.0](plugins/brainager.md) — [separate release](https://github.com/WizardYan/nipa-plugins/releases/tag/brainager-v0.1.0); requires NIPA 3.0.15+, site-provided SIF; real MRI acceptance pending.
+- [brainageR 0.1.1](plugins/brainager.md) — [separate release](https://github.com/WizardYan/nipa-plugins/releases/tag/brainager-v0.1.1); requires NIPA 3.0.15+, one-click managed SIF conversion; real build/MRI acceptance pending.

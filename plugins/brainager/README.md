@@ -1,6 +1,6 @@
 # brainageR for NIPA
 
-Plugin **0.1.0** · brainageR **2.1** · NIPA **3.0.15 or newer**
+Plugin **0.1.1** · brainageR **2.1** · NIPA **3.0.15 or newer**
 
 Predict brain age from one raw T1-weighted MRI per selected target. The plugin
 wraps the Octave/SPM12 container implementation linked by the brainageR authors.
@@ -47,9 +47,28 @@ them in NIPA based on real runtime measurements.
 
 ## Runtime setup
 
-Register a **site-provided SIF** in Plugin Store → brainageR → runtime setup.
-Singularity and Apptainer are supported, including Clinwulf's Singularity.
-`BRAINAGER_SIF` is the runtime binding environment variable.
+In Plugin Store → brainageR → Runtime and license setup, click **Build SIF with
+Singularity**. NIPA downloads the pinned image layers, materializes a local SIF,
+checks it and registers it automatically. With Apptainer the generic button may
+be labelled **Install runtime**; it performs the same SIF conversion. No Docker
+daemon is required on Clinwulf. Singularity/Apptainer must already be available
+in the environment that starts NIPA. You can still register an existing SIF;
+`BRAINAGER_SIF` remains the runtime binding environment variable.
+
+The managed source is the third-party **atlasli/brainage** image, whose publisher
+identifies it as brainageR 2.1 based on the Octave container recipe. It is not an
+author-official image. NIPA pins it by immutable OCI digest, never a floating tag:
+
+```text
+docker://atlasli/brainage@sha256:25d7ca8d699dc83cbc578467864488f162c46322c1de85b1a4efcdf99542947b
+```
+
+The download is approximately 3.43 GiB of compressed layers. Building the SIF
+requires additional scratch space and may take several minutes. NIPA selects
+and checks scratch storage before starting; download/conversion progress and
+cancellation are available in the runtime setup panel. The existing generic
+installer also registers interrupted builds as failed/retryable after a server
+restart. Do not assume an interrupted build has installed a valid image.
 
 The image must implement the upstream container layout:
 
@@ -59,13 +78,10 @@ The image must implement the upstream container layout:
   FSL QC utilities, NiftyReg and NiftySeg.
 
 The Octave container does not require a MATLAB license file. Its constituent
-tools still have their own licensing terms. This package redistributes neither
-the container nor the upstream models.
+tools still have their own licensing terms. This package references an image
+hosted by its publisher; it redistributes neither the container nor the models.
 
-The upstream repository documents building a **local** Docker image, not an
-immutable public Docker image suitable for a NIPA managed download. Therefore
-this plugin intentionally has no invented Docker Hub source and does not offer
-an automatic Build SIF download button yet.
+### Optional rebuild from upstream sources
 
 For a build machine with Docker and Singularity/Apptainer, start from the upstream
 container recipe pinned at commit `8ed63f92555c65e9c49d752af24af9db4e0a29ce`:
@@ -87,7 +103,8 @@ on the execution site. Do not schedule image builds inside scientific jobs.
 
 ## GUI example
 
-1. Install `brainager-0.1.0.nipa-plugin.tar.gz` and register a complete SIF.
+1. Install/update `brainager-0.1.1.nipa-plugin.tar.gz` and click the SIF build button,
+   or register a complete existing SIF. Wait until runtime setup reports ready.
 2. In Data, select one indexed raw T1w or import/register a standalone T1w and
    assign Artifact type `imaging.mri.anatomical.image` and contrast `T1w`.
 3. Choose Use in Analysis. In Expert choose **Brain age prediction**, or choose
@@ -121,6 +138,7 @@ build, raw-MRI execution and QC review remain to be accepted separately.
 ## Upstream sources
 
 - [brainageR](https://github.com/james-cole/brainageR), version tag `2.1`.
+- [Managed image publisher](https://hub.docker.com/r/atlasli/brainage).
 - [Octave container recipe](https://github.com/fprados/brainageR_dockerfile/tree/8ed63f92555c65e9c49d752af24af9db4e0a29ce).
 - [Native prediction CSV implementation](https://github.com/james-cole/brainageR/blob/2.1/predict_new_data_gm_wm_csf.R).
 

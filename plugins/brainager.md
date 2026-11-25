@@ -1,23 +1,25 @@
 # brainageR
 
-Plugin version **0.1.0** · Runtime **2.1** · Requires **NIPA 3.0.15 or newer**
+Plugin version **0.1.1** · brainageR **2.1** · Requires **NIPA 3.0.15 or newer**
 
-Predict brain age from raw T1w MRI. Outputs include predicted age, its confidence interval, optional brain-PAD and a segmentation QC report when available.
+Predict brain age from raw T1w MRI; output age, confidence interval, optional brain-PAD and available segmentation QC.
 
-[Read README and setup guide](brainager/README.md)
+[README and runtime setup](brainager/README.md) · [Download package](https://github.com/WizardYan/nipa-plugins/releases/download/brainager-v0.1.1/brainager-0.1.1.nipa-plugin.tar.gz)
 
-[Download plugin package](https://github.com/WizardYan/nipa-plugins/releases/download/brainager-v0.1.0/brainager-0.1.0.nipa-plugin.tar.gz)
+SHA-256 `920b28e207654a5dd547bc7439b1d36551244f1fff67f043baddc26f703e66fc`
 
-SHA-256 `01fc0c75323d9b0ae56b408e54be7ca8872a174602fa64f01e02c25190d601c5`
+## One-click runtime setup
 
-## Package files
-
-- [README.md](brainager/README.md)
-- [plugin.yaml](brainager/plugin.yaml)
-- [run.py](brainager/run.py)
+After updating the plugin, click **Build SIF with Singularity** in its runtime setup panel. Apptainer uses **Install runtime**. NIPA converts the digest-pinned third-party atlasli/brainage OCI image into a local SIF and registers it, using the existing generic runtime installer. Docker is not required on the execution host. Existing SIF registration remains supported.
 
 ## Acceptance status
 
-16 engineering tests passed, including both container engine command paths, input preservation, standalone-file execution, Artifact discovery and execution/run lineage. The container command was explicitly simulated. A complete site-provided Singularity/Apptainer SIF is required. Real SIF build and real MRI prediction remain to be accepted; this is not a scientifically validated release.
+17 engineering tests passed. Public OCI manifest digest and platform verified, GUI build button visible, and installation API task creation tested with a simulated worker. **The complete real SIF build and real MRI prediction have not been verified.** This image is published by atlasli, not the brainageR authors. No NIPA core change is required.
 
-[Upstream brainageR](https://github.com/james-cole/brainageR) · [All official plugins](../official-plugins.md)
+## Files
+
+- [plugin.yaml](brainager/plugin.yaml)
+- [run.py](brainager/run.py)
+- [README.md](brainager/README.md)
+
+[All official plugins](../official-plugins.md)
